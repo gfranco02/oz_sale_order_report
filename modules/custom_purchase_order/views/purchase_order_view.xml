@@ -12,8 +12,9 @@
                 <xpath expr="//button[@name='print_quotation'][1]" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//button[@name='print_quotation'][2]" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name='date_expired'></field>
+                    <field name='plazo_entrega'></field>
                 </xpath>
             </field>
         </record>

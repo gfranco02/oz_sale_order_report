@@ -49,6 +49,9 @@ gray = colors.Color(red=(200.0/255),green=(200.0/255),blue=(200.0/255))
 class PurchaseOrder(models.Model):
 	_inherit='purchase.order'
 
+	date_expired = fields.Date(u'Fecha de Vencimiento')
+	plazo_entrega = fields.Date(u'Plazo de Entrega') 
+
 	def build_report_pdf(self):
 		if self.state == 'draft':
 			name_state = u'PETICIÓN DE PRESUPUESTO'
@@ -145,7 +148,7 @@ class PurchaseOrder(models.Model):
 			hTable.wrapOn(c,120,500)
 			hTable.drawOn(c,pos_left,pos-125)
 
-			data=[[Paragraph(u"Lugar de Entrega:",p1_1),Paragraph(u"%s"%(self.picking_type_id.warehouse_id.name or ' '),p2)],]
+			data=[[Paragraph(u"Lugar de Entrega:",p1_1),Paragraph(u"%s"%(self.picking_type_id.warehouse_id.partner_id.street or ' '),p2)],]
 			hTable=Table(data,colWidths=170,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -154,7 +157,7 @@ class PurchaseOrder(models.Model):
 			hTable.wrapOn(c,120,500)
 			hTable.drawOn(c,pos_left,pos-140)
 
-			data=[[Paragraph(u"Observaciones:",p1_1),Paragraph(u"%s"%(self.partner_id.phone or ' '),p2)],]
+			data=[[Paragraph(u"Observaciones:",p1_1),Paragraph(u"%s"%(self.notes or ' '),p2)],]
 			hTable=Table(data,colWidths=170,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -204,7 +207,7 @@ class PurchaseOrder(models.Model):
 			hTable.drawOn(c,360,pos-125)
 
 			data= [['Fecha Vcto:'],
-			['%s'%(self.date_order)]]
+			['%s'%(self.date_expired)]]
 			hTable=Table(data,colWidths=106,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -243,7 +246,7 @@ class PurchaseOrder(models.Model):
 			hTable.drawOn(c,466,pos-125)
 
 			data= [['Plazo de Entrega:'],
-			['%s'%(self.date_order)]]
+			['%s'%(self.plazo_entrega)]]
 			hTable=Table(data,colWidths=106,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -287,16 +290,19 @@ class PurchaseOrder(models.Model):
 		# results = self._cr.dictfetchall()
 		#print(results)
 		lista =[]
+		precios_s_descuento =[]
 		for line in self.order_line:
 			codigo_producto   = str(line.product_id.default_code or ' ')
 			producto   = str(line.product_id.name or ' ')
 			cantidad   = str(line.product_uom_qty or ' ')
 			precio   = str(line.price_unit or ' ')
-			# descuento   = str(line.discount or ' ')
+			descuento   = str(line.discount or ' ')
 			suntotal   = str(line.price_subtotal or ' ')
 			iva   = str(line.taxes_id.name or ' ')
 
-			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(u"%s"%(self.picking_type_id.warehouse_id.name or ' '),p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(u'descuento',p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
+			precios_s_descuento.append(line.product_uom_qty*line.price_unit)
+
+			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(u"%s"%(self.picking_type_id.warehouse_id.name or ' '),p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(str(descuento),p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
 			t=Table(data,colWidths=69,rowHeights=(20))
 			t.setStyle(TableStyle([
 			('VALIGN',(0,0),(-1,-1),'TOP'),
@@ -329,7 +335,9 @@ class PurchaseOrder(models.Model):
 			Table_lines.wrapOn(c,120,500)
 			Table_lines.drawOn(c,pos_left,(pos-200)-40)
 
-			data=[[Paragraph(str(self.amount_total),p2_1),Paragraph(u"Descuento.",p2_1),Paragraph(str(self.amount_untaxed),p2_1),Paragraph(str(self.amount_tax),p2_1),Paragraph(str(self.amount_total),p2_1)],]
+			descuento = round((sum(precios_s_descuento)-float(self.amount_untaxed)),2)
+
+			data=[[Paragraph(str(self.amount_total),p2_1),Paragraph(str(descuento)or '',p2_1),Paragraph(str(self.amount_untaxed),p2_1),Paragraph(str(self.amount_tax),p2_1),Paragraph(str(self.amount_total),p2_1)],]
 			Table_lines=Table(data,colWidths=110.4,rowHeights=(15))
 			Table_lines.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),

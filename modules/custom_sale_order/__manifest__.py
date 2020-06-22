@@ -7,7 +7,7 @@
 	'version': '1.0',
 	'description':"""
 		Función: Personaliza el formato de Orden de Venta del Odoo.
-		Requiere: Multimoneda, multialmacen.
+		Requiere: Multimoneda, multialmacen, Descuentos.
 		Desarrollador: Rodrigo Dueñas
 		Funcional: Angel Linares
 	""",
