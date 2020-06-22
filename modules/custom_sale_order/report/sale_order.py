@@ -175,8 +175,21 @@ class SaleOrder(models.Model):
 			hTable.wrapOn(c,120,500)
 			hTable.drawOn(c,360,pos-95)
 
+			descuento_list = []
+			repetidos_list = []
+			for line in self.order_line:
+				descuento   = str(line.discount or ' ')
+				descuento_list.append(descuento)
+				if descuento in descuento_list:
+					repetidos_list.append(descuento)
+			
+			if len(descuento_list) > 0 and len(descuento_list) == len(repetidos_list):
+				descuento_total = descuento_list[0]
+			else:
+				descuento_total = ' '
+
 			data= [['Dscto Alt:'],
-			['%s'%(self.date_order)]]
+			['%s'%(descuento_total)]]
 			hTable=Table(data,colWidths=106,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -246,16 +259,19 @@ class SaleOrder(models.Model):
 		# results = self._cr.dictfetchall()
 		#print(results)
 		lista =[]
+		precios_s_descuento =[]
 		for line in self.order_line:
 			codigo_producto   = str(line.product_id.default_code or ' ')
 			producto   = str(line.product_id.name or ' ')
 			cantidad   = str(line.product_uom_qty or ' ')
 			precio   = str(line.price_unit or ' ')
-			# descuento   = str(line.discount or ' ')
+			descuento   = str(line.discount or ' ')
 			suntotal   = str(line.price_subtotal or ' ')
 			iva   = str(line.tax_id.name or ' ')
 
-			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(self.warehouse_id.name,p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(u'descuento',p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
+			precios_s_descuento.append(cantidad * precio)
+
+			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(self.warehouse_id.name,p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(descuento,p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
 			t=Table(data,colWidths=69,rowHeights=(20))
 			t.setStyle(TableStyle([
 			('VALIGN',(0,0),(-1,-1),'TOP'),
@@ -279,6 +295,8 @@ class SaleOrder(models.Model):
 		pos-=3
 		
 		def header_table4(c,pos):
+			
+
 			data=[[Paragraph(u"Total Bruto.",p1),Paragraph(u"Descuento.",p1),Paragraph(u"Subtotal",p1),Paragraph(u"Vir Impuestos",p1),Paragraph(u"Total",p1)],]
 			Table_lines=Table(data,colWidths=110.4,rowHeights=(15))
 			Table_lines.setStyle(TableStyle([
@@ -288,7 +306,7 @@ class SaleOrder(models.Model):
 			Table_lines.wrapOn(c,120,500)
 			Table_lines.drawOn(c,pos_left,(pos-170)-40)
 
-			data=[[Paragraph(str(self.amount_total),p2_1),Paragraph(u"Descuento.",p2_1),Paragraph(str(self.amount_untaxed),p2_1),Paragraph(str(self.amount_tax),p2_1),Paragraph(str(self.amount_total),p2_1)],]
+			data=[[Paragraph(str(sum(precios_s_descuento)),p2_1),Paragraph(precios_s_descuento-self.amount_total,p2_1),Paragraph(str(self.amount_untaxed),p2_1),Paragraph(str(self.amount_tax),p2_1),Paragraph(str(self.amount_total),p2_1)],]
 			Table_lines=Table(data,colWidths=110.4,rowHeights=(15))
 			Table_lines.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
