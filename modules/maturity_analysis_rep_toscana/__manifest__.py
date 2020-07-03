@@ -3,7 +3,7 @@
 	'name': 'Analisis de Vencimientos - TOSCANA',
 	'category': 'account',
 	'author': 'ITGRUPO-TOSCANA',
-	'depends': ['account_balance_doc_rep_it'],
+	'depends': ['account_balance_doc_rep_it','account_letras_it'],
 	'version': '1.0',
 	'description':"""
 	Sub-menu para reportes con Analisis de Vencimientos.
