@@ -59,8 +59,9 @@ class PurchaseOrder(models.Model):
 			name_state = u'ORDEN DE COMPRA'
 		if self.state != 'purchase' and self.state != 'draft':
 			name_state = 'ORDEN DE COMPRA'
-
-		path = self.env['res.config.settings'].search([('path_reports','!=',False)],limit=1).path_reports
+		
+		path = self.env['main.parameter'].search([])[0].dir_download
+		# path = self.env['main.parameter'].search([]).dir_download
 		now = fields.Datetime.context_timestamp(self,datetime.now())
 		name = name_state
 		file_name = u'P.0. %s %s.pdf'%(name,str(now)[:19].replace(':','_'))
