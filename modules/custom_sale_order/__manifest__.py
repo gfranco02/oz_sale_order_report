@@ -2,7 +2,7 @@
 {
 	'name': 'Orden de Venta Personalizada',
 	'category': 'sale',
-	'author': 'ITGRUPO-HELEO',
+	'author': 'ITGRUPO-TOSCANA',
 	'depends': ['sale_management','l10n_pe_toponyms','export_file_manager_it','partner_confirm','sale_order_contact'],
 	'version': '1.0',
 	'description':"""

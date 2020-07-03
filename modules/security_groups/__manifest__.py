@@ -9,6 +9,7 @@
 		-Desarrollador: Rodrigo Dueñas.
 		-Funcional: Angel Linares.
 	""",
+    'author': 'ITGRUPO-TOSCANA',
     'depends': ['sale_management'],
     'data': [
         'security/groups.xml',

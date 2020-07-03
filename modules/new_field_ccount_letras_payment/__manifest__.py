@@ -2,7 +2,7 @@
 {
 	'name': u'Codigo unico de Banco',
 	'category': 'reports',
-	'author': 'ITGRUPO-ABL-INTERNACIONAL',
+	'author': 'ITGRUPO-TOSCANA',
 	'depends': ['account_letras_it'],
 	'version': '1.0.0',
 	'description':"""

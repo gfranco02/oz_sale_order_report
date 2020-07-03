@@ -2,7 +2,7 @@
 {
 	'name': 'Orden de Compra Personalizada',
 	'category': 'purchase',
-	'author': 'ITGRUPO-HELEO',
+	'author': 'ITGRUPO-TOSCANA',
 	'depends': ['sale_management','l10n_pe_toponyms','purchase','partner_confirm','purchase_order_contact','bi_purchase_discount'],
 	'version': '1.0',
 	'description':"""
