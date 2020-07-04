@@ -1,0 +1,12 @@
+*.rar
+/.idea/*
+.idea/*
+*.pyc
+/*.pyc
+/.vscode/*
+.vscode/*
+*.vscode
+/**/*.pyc
+/**/*.json
+/**/*__pycache__
+/**/*bak
