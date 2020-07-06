@@ -276,7 +276,7 @@ class SaleOrder(models.Model):
 
 			precios_s_descuento.append(line.product_uom_qty*line.price_unit)
 
-			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(producto,p2_1),Paragraph(self.warehouse_id.name,p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(descuento,p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
+			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(producto,p2_1),Paragraph(str(self.warehouse_id.name),p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(descuento,p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
 			t=Table(data,colWidths=61,rowHeights=(20))
 			t.setStyle(TableStyle([
 			('VALIGN',(0,0),(-1,-1),'TOP'),
