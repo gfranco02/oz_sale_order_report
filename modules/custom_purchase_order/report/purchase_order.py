@@ -63,7 +63,7 @@ class PurchaseOrder(models.Model):
 		if self.state != 'purchase' and self.state != 'draft':
 			name_state = 'ORDEN DE COMPRA'
 		
-		path = self.env['main.parameter'].search([])[0].dir_download
+		path = self.env['main.parameter'].sudo().search([])[0].dir_download
 		# path = self.env['main.parameter'].search([]).dir_download
 		now = fields.Datetime.context_timestamp(self,datetime.now())
 		name = name_state
