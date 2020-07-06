@@ -32,12 +32,14 @@ col_widths1 = [float(i)/100*wUtil for i in (37,25,12)] # size of columns (list s
 col_widths2 = [float(i)/100*wUtil for i in (7,6,6,6,6,6,7,6,6,6,6,6,7,20)] # size of columns (list sum = 100%)
 
 separator = 12 # separador entre lineas
-register_fonts(['Calibri', 'Calibri-Bold'])
+# register_fonts(['Calibri', 'Calibri-Bold'])
+pdfmetrics.registerFont(TTFont('Calibri', 'Calibri.ttf'))
+pdfmetrics.registerFont(TTFont('Calibri-Bold', 'CalibriBold.ttf'))
 
 p1 = ParagraphStyle('p1',alignment=TA_CENTER,fontSize=8,fontName="Calibri-Bold")
 p1_1 = ParagraphStyle('p1',alignment=TA_LEFT,fontSize=8,fontName="Calibri-Bold")
 p2 = ParagraphStyle('p2',alignment=TA_LEFT,fontSize=7,fontName="Calibri")
-p2_1 = ParagraphStyle('p2_1',alignment=TA_CENTER,fontSize=7,fontName="Calibri")
+p2_1 = ParagraphStyle('p2',alignment=TA_CENTER,fontSize=7,fontName="Calibri")
 p3 = ParagraphStyle('p3',alignment=TA_LEFT,fontSize=10,fontName="Calibri")
 p4 = ParagraphStyle('p4',alignment=TA_RIGHT,fontSize=10,fontName="Calibri")
 p5 = ParagraphStyle('p5',alignment=TA_RIGHT,fontSize=10,fontName="Calibri-Bold")
@@ -276,7 +278,7 @@ class SaleOrder(models.Model):
 
 			precios_s_descuento.append(line.product_uom_qty*line.price_unit)
 
-			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(producto,p2_1),Paragraph(str(self.warehouse_id.name),p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(descuento,p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
+			data = [[Paragraph(codigo_producto,p2_1),Paragraph(producto,p2_1),Paragraph(producto,p2_1),Paragraph(self.warehouse_id.name,p2_1),Paragraph(cantidad,p2_1),Paragraph(precio,p2_1),Paragraph(descuento,p2_1),Paragraph(suntotal,p2_1),Paragraph(iva,p2_1)],]
 			t=Table(data,colWidths=61,rowHeights=(20))
 			t.setStyle(TableStyle([
 			('VALIGN',(0,0),(-1,-1),'TOP'),
