@@ -32,7 +32,9 @@ col_widths1 = [float(i)/100*wUtil for i in (37,25,12)] # size of columns (list s
 col_widths2 = [float(i)/100*wUtil for i in (7,6,6,6,6,6,7,6,6,6,6,6,7,20)] # size of columns (list sum = 100%)
 
 separator = 12 # separador entre lineas
-register_fonts(['Calibri', 'Calibri-Bold'])
+# register_fonts(['Calibri', 'Calibri-Bold'])
+pdfmetrics.registerFont(TTFont('Calibri', 'Calibri.ttf'))
+pdfmetrics.registerFont(TTFont('Calibri-Bold', 'CalibriBold.ttf'))
 p1 = ParagraphStyle('p1',alignment=TA_CENTER,fontSize=8,fontName="Calibri-Bold")
 p1_1 = ParagraphStyle('p1',alignment=TA_LEFT,fontSize=8,fontName="Calibri-Bold")
 p2 = ParagraphStyle('p2',alignment=TA_LEFT,fontSize=7,fontName="Calibri")
