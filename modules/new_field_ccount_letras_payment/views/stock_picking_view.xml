@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.view.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock_remission_guide.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rg_remission_guide_id']" position="after">
+                    <field name="delivery_agency" domain="[('is_company', '=',True)]" />
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
