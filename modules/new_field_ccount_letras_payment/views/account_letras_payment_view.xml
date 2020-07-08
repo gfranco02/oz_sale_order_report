@@ -11,5 +11,28 @@
                </xpath>
             </field>
         </record>
+        
+        <record id="view_account_letras_payment_manual_tree" model="ir.ui.view">
+            <field name="name">account.letras.payment.manual.inherit.view.tree</field>
+            <field name="model">account.letras.payment.manual</field>
+            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_manual_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='nro_letra']" position="after">
+                    <field name="cu_banco"></field>
+               </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_letras_payment_manual_form_receivables" model="ir.ui.view">
+            <field name="name">account.letras.payment.manual.inherit.view.tree</field>
+            <field name="model">account.letras.payment.manual</field>
+            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_manual_form_receivables"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='nro_letra']" position="after">
+                    <field name="cu_banco"></field>
+               </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>
