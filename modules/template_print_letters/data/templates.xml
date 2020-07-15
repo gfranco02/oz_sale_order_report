@@ -8,33 +8,43 @@
             <field name="body_html"><![CDATA[
 
             % for l in object.letras_manual_ids:
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${l.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(16)} ${object.date_exchange} ${object.company_id.state_id.name.rjust(10)} ${''.ljust(4)} ${l.expiration_date} ${''.ljust(7)} ${l.currency_id.name}${"{:4,.0f}".format(l.imp_div)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${l.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date_exchange} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${l.expiration_date} ${''.ljust(7)} ${l.currency_id.name}${"{:4,.0f}".format(l.imp_div)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${l.number_letter}
 
-                               ${l.number_letter}
-
-                               ${object.partner_id.name.ljust(25)}
-                               ${object.partner_id.street.ljust(25)}
+                            ${object.partner_id.name.ljust(25)}
+                            ${object.partner_id.street.ljust(25)}
                                
 
-                               ${object.company_id.city.rjust(30)}
+                            ${object.company_id.city.rjust(30)}
                                ${object.company_id.vat.ljust(20)} ${object.company_id.phone.rjust(3)}
 
 
-                               ${''.ljust(10)} ${'domicilio'.ljust(10)}
-                               ${''.ljust(10)} ${'localidad'.ljust(10)}
-                               ${''.ljust(10)} ${'dni'.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
-                               ${''.ljust(10)}
+                        ${''.ljust(10)} ${object.aval_permanente.street.ljust(10)}
+                        ${''.ljust(10)} ${object.aval_permanente.state_id.name.ljust(10)}
+                        ${''.ljust(10)} ${object.aval_permanente.vat.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
+                            ${''.ljust(10)}
             % endfor
 
             ]]></field>
