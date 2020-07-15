@@ -21,13 +21,13 @@
                     ${l.number_letter}
 
 
-
                     ${object.partner_id.name.ljust(29)}
                     ${object.partner_id.street.ljust(29)}
                                
 
-                            ${object.partner_id.state_id.name.rjust(30)}
-                        ${object.partner_id.vat.ljust(25)} ${object.partner_id.phone.rjust(3)}
+                    ${object.partner_id.state_id.name.rjust(29)}
+                    ${object.partner_id.vat.ljust(20)} ${object.partner_id.phone.rjust(3)}
+
 
 
                     ${''.ljust(10)} ${object.aval_permanente.street.ljust(10)}
