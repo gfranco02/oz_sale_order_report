@@ -16,7 +16,6 @@
                         
 
 
-
                         ${l.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date_exchange.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${l.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${l.currency_id.name}${"{:4,.0f}".format(l.imp_div)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
@@ -27,8 +26,8 @@
                     ${object.partner_id.name.ljust(29)}
                     ${object.partner_id.street.ljust(29)}
                                
-                        ${object.partner_id.state_id.name.rjust(34)}
-                    ${object.partner_id.vat.ljust(29)} ${object.partner_id.phone.rjust(3)}
+                    ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
+                    ${''.ljust(29)} ${object.partner_id.phone.rjust(3)}
 
 
 
