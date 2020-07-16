@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_res_currency_form">
+            <field name="name">res.currency.form</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"></field>
+            <field name="arch" type="xml">
+                <field name="position" position="before">
+                    <field name="leter_currency"></field>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_account_letras_payment_manual_form_receivables" model="ir.ui.view">
+            <field name="name">account.letras.payment.inherit.view.tree</field>
+            <field name="model">account.letras.payment</field>
+            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form_receivables"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='nro_letra']" position="after">
+                    <field name="leter_currency" invisible="1"></field>
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

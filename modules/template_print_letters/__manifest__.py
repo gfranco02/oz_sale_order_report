@@ -5,7 +5,8 @@
 		"vit_dotmatrix",
 		"account_letras_it",
 		"account_base_it",
-		"print_letters"
+		"print_letters",
+		'base'
 	],
 	"author": "ITSOLUTIONS-TOSCANA",
 	'website': 'https://itgrupo-solutions.com/',
@@ -15,7 +16,9 @@
 		-Funcional: Jorge Salinas. 
 	""",
 	"data": [
-		"data/templates.xml"
+		"data/templates.xml",
+		"views/res_currency_view.xml",
+		"views/account_letras_payment_view.xml",
 	],
 	"installable": True,
 	"auto_install": False,
