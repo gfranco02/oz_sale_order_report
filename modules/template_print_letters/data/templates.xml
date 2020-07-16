@@ -29,7 +29,6 @@
                     ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
                     ${''.ljust(29)} ${object.partner_id.phone.rjust(3)}
 
-
                     ${''.ljust(17)}${object.aval_permanente.name.ljust(10)}
                     ${''.ljust(10)}
                     ${''.ljust(10)} ${object.aval_permanente.street.ljust(10)}
