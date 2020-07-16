@@ -31,6 +31,7 @@
 
 
                     ${''.ljust(17)}${object.aval_permanente.name.ljust(10)}
+                    ${''.ljust(10)}
                     ${''.ljust(10)} ${object.aval_permanente.street.ljust(10)}
                     ${''.ljust(10)} ${object.aval_permanente.state_id.name.ljust(10)}
                     ${''.ljust(10)} ${object.aval_permanente.vat.ljust(10)}
