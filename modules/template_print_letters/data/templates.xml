@@ -35,6 +35,12 @@
                     ${''.ljust(10)} ${object.aval_permanente.state_id.name.ljust(10)}
                     ${''.ljust(10)} ${object.aval_permanente.vat.ljust(10)}
                         ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
 
             % endfor
             ]]></field>
