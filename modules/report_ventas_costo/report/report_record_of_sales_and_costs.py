@@ -13,6 +13,51 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 	period_ini = fields.Date(u'Fecha inicial',default=lambda self: fields.Date.context_today(self))
 	period_end = fields.Date(u'Fecha Final',default=lambda self: fields.Date.context_today(self))
 
+	# def _get_previus_layer(self, location_id,product_id_1):
+	# 	# -> Obtener último movimento de product_id en location_id
+	# 	# -> Ordenamiento por fecha, si es gasto vinculado y id
+	# 	# -> Si hubieran 2 compras con gastos vinculados exactamente 
+	# 	# -> en la misma hora, salen primero las compras y luego todos 
+	# 	# -> los GV asociados a ellas.
+	# 	# ****
+		
+	# 	product_id = product_id_1
+	# 	date_done = parse2str_dt(self.period_end)
+	# 	start_date = '%s-01-01 00:00:00' % date_done[:4]
+
+	# 	params = (start_date, date_done, product_id) + 4 * (location_id,)
+	# 	self.flush()
+	# 	sql = f"""
+	# 	SELECT ARRAY_AGG(T.id)
+	# 	FROM (
+	# 		SELECT 
+	# 		kvl.id
+	# 		FROM 
+	# 		kdx_valuation_layer kvl
+	# 		JOIN stock_move sm ON sm.id = kvl.move_id
+	# 		WHERE sm.state = 'done'
+	# 		AND COALESCE(sm.scrapped, false) = false
+	# 		AND kvl.date_done >= %s 
+	# 		AND kvl.date_done <= %s 
+	# 		AND kvl.product_id = %s 
+	# 		AND (kvl.location_id = %s or kvl.location_dest_id = %s)
+	# 		AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
+	# 			(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
+	# 			OR COALESCE(kvl.is_transfer, false) != true )
+	# 		ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC 
+	# 	)T;"""
+
+	# 	self._cr.execute(sql, params)
+	# 	print(sql)
+	# 	arr_values = self._cr.fetchone()[0]
+	# 	print(arr_values)
+	# 	index = arr_values.index(self.id) + 1
+	# 	prev_layer_id = arr_values[index : index + 1] or False
+	# 	return self.browse(prev_layer_id)
+
+	
+	
+	
 	def build_report_excel(self):
 		com = self.env.company
 		path = self.env['report.it'].get_reports_path()
@@ -62,6 +107,8 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 
 		worksheet.write(7,1, "Fecha Inicio", boldbord2)
 		worksheet.write(8,1, "Fecha Fin", boldbord2)
+		worksheet.write(7,2, self.period_ini, fdatetime)
+		worksheet.write(8,2, self.period_end, fdatetime)
 				
 		worksheet.write(x,1, "FECHA EMISION.", boldbord)
 		worksheet.write(x,2, "FECHA VENCIMIENTO", boldbord)
@@ -80,7 +127,8 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		worksheet.write(x,15, "MON", boldbord)
 		worksheet.write(x,16, "MONTO ME", boldbord)
 		worksheet.write(x,17, "TC", boldbord)
-		worksheet.write(x,18, "COSTO PROMEDIO PONDERADO", boldbord)
+		worksheet.write(x,18, "CANTIDAD DESPACHADA", boldbord)
+		worksheet.write(x,19, "COSTO PROMEDIO PONDERADO", boldbord)
 		x+=1
 
 
@@ -88,16 +136,11 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 
 		facturas_list = []
 		for facturas_to in facturas_total:
-			print(facturas_to)
 			facturas_list.extend(facturas_to.invoice_line_ids.ids)
-		print(facturas_list)
 		
-		facturas = self.env['account.move.line'].sudo()
-		# print(facturas)
-
 		pedido_venta = self.env['sale.order'].sudo()
 
-		for item in facturas:
+		for item in self.env['account.move.line'].browse(facturas_list):
 			if item.id in facturas_list:
 				worksheet.write(x,1, item.move_id.invoice_date or '', fdatetime)
 				worksheet.write(x,2, item.move_id.invoice_date_due or '', fdatetime)
@@ -129,14 +172,15 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,15, item.move_id.currency_id.name  or '', normal)
 				worksheet.write(x,16, item.move_id.amount_total  or '', normal)
 				worksheet.write(x,17, item.move_id.currency_rate  or '', normal)
-
-				print(item.move_id.name)
-				print(item.move_id.invoice_origin)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
-				print(pv_fac)
-
-
-
+				cantidad_entregada_list = []
+				for entrega in pv_fac.picking_ids:
+					for linea_entrega in entrega.move_line_ids_without_package:
+						if linea_entrega.product_id.id == item.product_id.id:
+							cantidad_entregada_list.append(linea_entrega.qty_done)
+							worksheet.write(x,18, sum(cantidad_entregada_list), normal)
+							# print(self._get_previus_layer(linea_entrega.location_id.id,item.product_id.id))
+				worksheet.write(x,19, item.product_id.standard_price  or '', normal)
 				x+=1
 				# print(item.move_id.ref[:9])
 
