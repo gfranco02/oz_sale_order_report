@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="report_record_of_sales_and_costs_wizard" model="ir.ui.view">
+			<field name="name">report.record.of.sales.and.costs</field>
+			<field name="model">report.record.of.sales.and.costs</field>
+			<field name="arch" type="xml">
+				<form string="Registro de Venta y Costos">
+					<group>
+						<field name="period_ini" required="1"/>
+						<field name="period_end" required="1"/>
+					</group>
+					<footer>
+						<button string="Exportar a Excel" name="build_report_excel" type="object" class="btn-primary" icon="fa-table"/>
+						<button string="Cancelar" class="oe_inline" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="report_record_of_sales_and_costs_action" model="ir.actions.act_window">
+			<field name="name">Registro de Venta y Costos</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">report.record.of.sales.and.costs</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+    <menuitem 
+		id="report_record_of_sales_and_costs_id" 
+		name="Registro de Venta y Costos" 
+		parent="account.account_reports_management_menu"
+		action="report_record_of_sales_and_costs_action"/>
+
+	</data>
+</odoo>
