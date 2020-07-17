@@ -15,12 +15,11 @@
 
                         
 
-
                         ${l.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date_exchange.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${l.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${l.currency_id.name} ${"{:,.2f}".format(l.imp_div)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
+                    
                     ${l.number_letter} ${l.currency_id.leter_currency}
-
 
                     ${''.ljust(10)}
                     ${object.partner_id.name.ljust(29)}
