@@ -79,7 +79,7 @@ class SaleOrder(models.Model):
 			src_path = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
 			header_path=src_path+'/Toscana_logo.JPG'
 			header_logo=ImageReader(header_path)
-			c.drawImage(header_logo,20,pos-10,width=230,height=60,mask='auto')
+			c.drawImage(header_logo,20,pos-10,width=330,height=70,mask='auto')
 
 			data= [[name_state],
 			['Numero: %s'%(self.name or ' ')],
@@ -110,7 +110,7 @@ class SaleOrder(models.Model):
 			hTable.wrapOn(c,120,500)
 			hTable.drawOn(c,pos_left,pos-50)
 
-			data=[[Paragraph(u"Contacto: %s"%(self.partner_order_id.name or ' '),p1_1)],]
+			data=[[Paragraph(u"Contacto: %s"%(self.contact_order_id.name or ' '),p1_1)],]
 			hTable=Table(data,colWidths=340,rowHeights=(15))
 			hTable.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),

@@ -80,7 +80,7 @@ class PurchaseOrder(models.Model):
 			src_path = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
 			header_path=src_path+'/Toscana_logo.JPG'
 			header_logo=ImageReader(header_path)
-			c.drawImage(header_logo,20,pos-10,width=230,height=60,mask='auto')
+			c.drawImage(header_logo,20,pos-10,width=330,height=70,mask='auto')
 
 			data= [[name_state],
 			['Numero: %s'%(self.name or ' ')],
