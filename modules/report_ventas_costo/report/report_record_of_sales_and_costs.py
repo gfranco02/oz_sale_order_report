@@ -48,9 +48,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 	# 	)T;"""
 
 	# 	self._cr.execute(sql, params)
-	# 	print(sql)
 	# 	arr_values = self._cr.fetchone()[0]
-	# 	print(arr_values)
 	# 	index = arr_values.index(self.id) + 1
 	# 	prev_layer_id = arr_values[index : index + 1] or False
 	# 	return self.browse(prev_layer_id)
@@ -175,14 +173,21 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
 				cantidad_entregada_list = []
 				for entrega in pv_fac.picking_ids:
-					for linea_entrega in entrega.move_line_ids_without_package:
-						if linea_entrega.product_id.id == item.product_id.id:
-							cantidad_entregada_list.append(linea_entrega.qty_done)
-							worksheet.write(x,18, sum(cantidad_entregada_list), normal)
-							# print(self._get_previus_layer(linea_entrega.location_id.id,item.product_id.id))
-				worksheet.write(x,19, item.product_id.standard_price  or '', normal)
+					if entrega.state == 'done' and entrega.origin == item.move_id.invoice_origin:
+						for linea_entrega in entrega.move_line_ids_without_package:
+							if linea_entrega.product_id.id == item.product_id.id:
+								cantidad_entregada_list.append(linea_entrega.qty_done)
+								worksheet.write(x,18, sum(cantidad_entregada_list), normal)
+				query = """select product_id,avg_cost 
+				from kdx_valuation_layer 
+				where product_id= %s
+				order by create_date desc limit 1
+				"""%(item.product_id.id)
+				self._cr.execute(query)
+				results = self._cr.dictfetchall()
+				for item in results:
+					worksheet.write(x,19, item['avg_cost']  or '', decimal2)
 				x+=1
-				# print(item.move_id.ref[:9])
 
 
 		size_widths = (2, 13, 13, 5, 7, 11, 11, 13, 20, 5, 20, 8, 8,) + 3 * (8,) + (8, 8, 8)
