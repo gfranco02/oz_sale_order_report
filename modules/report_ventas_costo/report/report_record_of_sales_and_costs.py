@@ -100,8 +100,8 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		x = 10
 		size_widths = tuple()
 
-		worksheet.merge_range(1, 1, 2, 18, com.name.upper(), title)
-		worksheet.merge_range(4, 1, 5, 18, "Registro de Venta y Costos", title)
+		worksheet.merge_range(1, 1, 2, 20, com.name.upper(), title)
+		worksheet.merge_range(4, 1, 5, 20, "Registro de Venta y Costos", title)
 
 		worksheet.write(7,1, "Fecha Inicio", boldbord2)
 		worksheet.write(8,1, "Fecha Fin", boldbord2)
@@ -127,6 +127,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		worksheet.write(x,17, "TC", boldbord)
 		worksheet.write(x,18, "CANTIDAD DESPACHADA", boldbord)
 		worksheet.write(x,19, "COSTO PROMEDIO PONDERADO", boldbord)
+		worksheet.write(x,20, "COSTO PROMEDIO PONDERADO TOTAL", boldbord)
 		x+=1
 
 
@@ -185,8 +186,9 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				"""%(item.product_id.id)
 				self._cr.execute(query)
 				results = self._cr.dictfetchall()
-				for item in results:
-					worksheet.write(x,19, item['avg_cost']  or '', decimal2)
+				for item_for in results:
+					worksheet.write(x,19, item_for['avg_cost']  or '', decimal2)
+					worksheet.write(x,20, item_for['avg_cost'] * item.quantity  or '', decimal2)
 				x+=1
 
 

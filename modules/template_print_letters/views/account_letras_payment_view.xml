@@ -11,5 +11,42 @@
                </xpath>
             </field>
         </record>
+
+         <record id="view_account_letras_payment_form_receivables_inherit" model="ir.ui.view">
+            <field name="name">account_letras_payment_inherit</field>
+            <field name="model">account.letras.payment</field>
+            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form_receivables"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='generate_report_file'][1]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='letras_manual_ids']" position="after">
+                        <div>
+                            <label for="title" string="Impresión:" style="font-weight: bold; font-size: 16px;"/>
+                            <group>
+                                <group>
+                                    <field name="type_impresion" widget="radio"></field>
+                                </group>
+                                <group>
+                                    <button type="object" name="generate_report_file" string="Imprimir Letras" icon="fa-print"  attrs="{'invisible': [('state','=','draft')]}"/>
+                                    <label for="note" string="Debe de calcular el documento para poder imprimir letras" attrs="{'invisible': [('state','in',('check','done'))]}" />
+                                </group>
+                            </group>
+                        </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_letras_payment_form_receivables" model="ir.ui.view">
+            <field name="name">account.letras.payment.inherit.view.form</field>
+            <field name="model">account.letras.payment</field>
+            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form_receivables"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page/field[@name='letras_manual_ids']/tree/field[@name='credit']" position="after">
+                    <field name="print_letter" widget="boolean_toggle"></field>
+               </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>

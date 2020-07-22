@@ -26,14 +26,60 @@
                     ${object.partner_id.street.ljust(29)}
                                
                     ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
-                    ${''.ljust(29)} ${object.partner_id.phone.rjust(3)}
+                    ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
 
 
-                    ${''.ljust(17)}${object.aval_permanente.name.ljust(10)}
+                    ${''.ljust(17)}${object.aval_permanente.name or ''.ljust(10)}
                     ${''.ljust(10)}
-                    ${''.ljust(10)} ${object.aval_permanente.street.ljust(10)}
-                    ${''.ljust(10)} ${object.aval_permanente.state_id.name.ljust(10)}
-                    ${''.ljust(10)} ${object.aval_permanente.vat.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.street or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.state_id.name or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.vat or ''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+
+            % endfor
+            ]]></field>
+        </record>
+
+        <record id="template_dotmatrix_so" model="mail.template">
+            <field name="name">Dot Matrix Letters 2</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Dot Matrix Template for Letters 2</field>
+            <field name="body_html"><![CDATA[
+            % for l in object.letras_manual_ids:
+                        ${''.ljust(10)}
+
+
+
+
+
+                        
+
+                        ${l.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date_exchange.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${l.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${l.currency_id.name} ${"{:,.2f}".format(l.imp_div)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                    
+                    ${l.number_letter} ${l.currency_id.leter_currency}
+
+                    ${''.ljust(10)}
+                    ${object.partner_id.name.ljust(29)}
+                    ${object.partner_id.street.ljust(29)}
+                               
+                    ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
+                    ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
+
+
+                    ${''.ljust(17)}${object.aval_permanente.name or ''.ljust(10)}
+                    ${''.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.street or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.state_id.name or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.aval_permanente.vat or ''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
