@@ -12,7 +12,7 @@
 	'demo': [],
 	'data':	[
 		'views/account_letras_payment_view.xml',
-		'views/stock_picking_view.xml',
+		'views/sale_order_view.xml',
 		],
 	'installable': True
 }
