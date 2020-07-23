@@ -19,6 +19,7 @@
 		"data/templates.xml",
 		"views/res_currency_view.xml",
 		"views/account_letras_payment_view.xml",
+		"reports/report_letters.xml",
 	],
 	"installable": True,
 	"auto_install": False,

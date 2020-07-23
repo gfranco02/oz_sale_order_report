@@ -2,29 +2,45 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError,ValidationError
 import base64
+import re 
 
 class AccountLetrasPaymentManual(models.Model):
 	_inherit = 'account.letras.payment.manual'
 
 	leter_currency = fields.Char()
-	print_letter = fields.Boolean(u'¿Imprimir?',default=False)
+	print_letter = fields.Boolean(u'¿Imprimir?',readonly=False)
 
 	@api.onchange('currency_id')
 	def _onchange_currency_id(self):
 		self.leter_currency = self.currency_id.leter_currency
+	
+	@api.onchange('print_letter')
+	def _onchange_print_letter(self):
+		valor = self.print_letter
+		id_line = re.findall("\d+", str(self.id)) 
+		if id_line != False:
+			query = """
+					UPDATE account_letras_payment_manual
+					SET print_letter = %s
+					WHERE id = %s;
+				"""%(valor,id_line[0])
+			self._cr.execute(query)
 		
+
 class AccountLetrasPayment(models.Model):
 	_name = 'account.letras.payment'
 	_inherit = 'account.letras.payment'
 
-	type_impresion = fields.Selection([('ic','Impresión Continua'),('in','Impresión Letra Unica')],string=u'Tipo de Impresión',default='ic')
+	type_impresion = fields.Selection([('ic','Impresión Continua'),('in','Impresión por Letra')],string=u'Tipo de Impresión',default='ic')
 
 
 	def generate_report_file(self):
 		if self.type_impresion == 'ic':
 			tpl = self.env['mail.template'].search([('name', '=', 'Dot Matrix Letters')])
+			print('ic')
 		if self.type_impresion == 'in':
 			tpl = self.env['mail.template'].search([('name', '=', 'Dot Matrix Letters 2')])
+			print('in')
 		if self.type_impresion == False:
 			raise UserError(u'Debe de seleccionar un tipo de impresión')
 		
