@@ -1,12 +1,13 @@
 {
-	"name": "Template-Imprimir Letras",
+	"name": "Letras Toscana",
 	"version": "1.0",
 	"depends": [
 		"vit_dotmatrix",
 		"account_letras_it",
 		"account_base_it",
 		"print_letters",
-		'base'
+		'base',
+		'stock_remission_guide'
 	],
 	"author": "ITSOLUTIONS-TOSCANA",
 	'website': 'https://itgrupo-solutions.com/',
@@ -19,6 +20,7 @@
 		"data/templates.xml",
 		"views/res_currency_view.xml",
 		"views/account_letras_payment_view.xml",
+		"views/sale_order_view.xml",
 		"reports/report_letters.xml",
 	],
 	"installable": True,

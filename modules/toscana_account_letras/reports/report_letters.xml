@@ -177,14 +177,14 @@
 
                     <div class="texto-numero"><span t-field="o.nro_letra"/></div>
                     <div class="texto-ref-girador"><span t-field="docs.company_id.vat"/></div>
-                    <div class="texto-fecha-giro"><span t-field="docs.date_exchange"/></div>
+                    <div class="texto-fecha-giro"><span t-field="docs.date"/></div>
                     <div class="texto-lugar-giro">LIMA</div>
                     <div class="texto-fecha-vencimiento"><span t-field="o.expiration_date"/></div>
                     <div class="texto-fecha-cantidad"><span t-field="o.imp_div"/><span t-field="o.currency_id.name"/></div>
 
 
                     <div class="texto-empresa"><span t-field="docs.company_id.name"/>, la cantidad de: .</div>
-                    <div class="texto-numero-letra"><span t-field="o.number_letter"/> .</div>
+                    <div class="texto-numero-letra"><span t-field="o.number_letter"/> <span t-field="o.leter_currency"/>.</div>
                     
                     <div class="texto-nombre-partner"><span t-field="docs.partner_id.name"/> . </div>
                     <div class="texto-direccion-partner"><span t-field="docs.partner_id.street"/> . </div>

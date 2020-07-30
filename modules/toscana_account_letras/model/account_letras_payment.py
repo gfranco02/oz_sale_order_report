@@ -9,11 +9,9 @@ class AccountLetrasPaymentManual(models.Model):
 
 	leter_currency = fields.Char()
 	print_letter = fields.Boolean(u'¿Imprimir?',readonly=False)
+	cu_banco = fields.Char('CU Banco')
 
-	@api.onchange('currency_id')
-	def _onchange_currency_id(self):
-		self.leter_currency = self.currency_id.leter_currency
-	
+
 	@api.onchange('print_letter')
 	def _onchange_print_letter(self):
 		valor = self.print_letter
@@ -25,6 +23,12 @@ class AccountLetrasPaymentManual(models.Model):
 					WHERE id = %s;
 				"""%(valor,id_line[0])
 			self._cr.execute(query)
+			query2 = """
+					UPDATE account_letras_payment_manual
+					SET leter_currency = '%s'
+					WHERE id = %s;
+				"""%(str(self.letra_payment_id.currency_id.leter_currency),id_line[0])
+			self._cr.execute(query2)
 		
 
 class AccountLetrasPayment(models.Model):
@@ -37,10 +41,10 @@ class AccountLetrasPayment(models.Model):
 	def generate_report_file(self):
 		if self.type_impresion == 'ic':
 			tpl = self.env['mail.template'].search([('name', '=', 'Dot Matrix Letters')])
-			print('ic')
+			# print('ic')
 		if self.type_impresion == 'in':
 			tpl = self.env['mail.template'].search([('name', '=', 'Dot Matrix Letters 2')])
-			print('in')
+			# print('in')
 		if self.type_impresion == False:
 			raise UserError(u'Debe de seleccionar un tipo de impresión')
 		
