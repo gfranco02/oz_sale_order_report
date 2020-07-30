@@ -13,49 +13,6 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 	period_ini = fields.Date(u'Fecha inicial',default=lambda self: fields.Date.context_today(self))
 	period_end = fields.Date(u'Fecha Final',default=lambda self: fields.Date.context_today(self))
 
-	# def _get_previus_layer(self, location_id,product_id_1):
-	# 	# -> Obtener último movimento de product_id en location_id
-	# 	# -> Ordenamiento por fecha, si es gasto vinculado y id
-	# 	# -> Si hubieran 2 compras con gastos vinculados exactamente 
-	# 	# -> en la misma hora, salen primero las compras y luego todos 
-	# 	# -> los GV asociados a ellas.
-	# 	# ****
-		
-	# 	product_id = product_id_1
-	# 	date_done = parse2str_dt(self.period_end)
-	# 	start_date = '%s-01-01 00:00:00' % date_done[:4]
-
-	# 	params = (start_date, date_done, product_id) + 4 * (location_id,)
-	# 	self.flush()
-	# 	sql = f"""
-	# 	SELECT ARRAY_AGG(T.id)
-	# 	FROM (
-	# 		SELECT 
-	# 		kvl.id
-	# 		FROM 
-	# 		kdx_valuation_layer kvl
-	# 		JOIN stock_move sm ON sm.id = kvl.move_id
-	# 		WHERE sm.state = 'done'
-	# 		AND COALESCE(sm.scrapped, false) = false
-	# 		AND kvl.date_done >= %s 
-	# 		AND kvl.date_done <= %s 
-	# 		AND kvl.product_id = %s 
-	# 		AND (kvl.location_id = %s or kvl.location_dest_id = %s)
-	# 		AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
-	# 			(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
-	# 			OR COALESCE(kvl.is_transfer, false) != true )
-	# 		ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC 
-	# 	)T;"""
-
-	# 	self._cr.execute(sql, params)
-	# 	arr_values = self._cr.fetchone()[0]
-	# 	index = arr_values.index(self.id) + 1
-	# 	prev_layer_id = arr_values[index : index + 1] or False
-	# 	return self.browse(prev_layer_id)
-
-	
-	
-	
 	def build_report_excel(self):
 		com = self.env.company
 		path = self.env['report.it'].get_reports_path()
@@ -163,14 +120,14 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,10, item.product_id.default_code or '', normal)
 				worksheet.write(x,11, item.product_id.name or '', normal)
 				worksheet.write(x,12, item.quantity or '', normal)
-				worksheet.write(x,13, (item.quantity*item.price_unit)*item.move_id.currency_rate or '', normal)
-				impuestos = item.tax_ids
-				lista_impuestos = []
-				for impuesto in impuestos:
-					lista_impuestos.append(impuesto.amount)
-				worksheet.write(x,14, ((sum(lista_impuestos)/100) *item.quantity*item.price_unit)*item.move_id.currency_rate  or '', normal)
-				worksheet.write(x,15, item.move_id.amount_total*item.move_id.currency_rate  or '', normal)
-				worksheet.write(x,16, item.move_id.currency_id.name  or '', normal)
+				precio_cantidad = item.price_subtotal
+				print(precio_cantidad)
+				precio_producto = precio_cantidad*item.move_id.currency_rate
+				worksheet.write(x,13, precio_producto or '', normal)
+				impuestos = item.price_total - precio_cantidad
+				worksheet.write(x,14, impuestos  or '', decimal2)
+				worksheet.write(x,15, precio_producto+impuestos  or '', decimal2)
+				worksheet.write(x,16, item.move_id.currency_id.name  or '', decimal2)
 				worksheet.write(x,17, item.move_id.amount_total  or '', normal)
 				worksheet.write(x,18, item.move_id.currency_rate  or '', normal)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
