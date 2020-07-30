@@ -116,18 +116,19 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		worksheet.write(x,6, "TDP", boldbord)
 		worksheet.write(x,7, "RUC", boldbord)
 		worksheet.write(x,8, "PARTNER", boldbord)
-		worksheet.write(x,9, "CP", boldbord)
-		worksheet.write(x,10, "PRODUCTO", boldbord)
-		worksheet.write(x,11, "CANTIDAD", boldbord)
-		worksheet.write(x,12, "VENTA TOTAL SIN IMPUESTO", boldbord)
-		worksheet.write(x,13, "IGV", boldbord)
-		worksheet.write(x,14, "TOTAL", boldbord)
-		worksheet.write(x,15, "MON", boldbord)
-		worksheet.write(x,16, "MONTO ME", boldbord)
-		worksheet.write(x,17, "TC", boldbord)
-		worksheet.write(x,18, "CANTIDAD DESPACHADA", boldbord)
-		worksheet.write(x,19, "COSTO PROMEDIO PONDERADO", boldbord)
-		worksheet.write(x,20, "COSTO PROMEDIO PONDERADO TOTAL", boldbord)
+		worksheet.write(x,9, "VENDEDOR", boldbord)
+		worksheet.write(x,10, "CP", boldbord)
+		worksheet.write(x,11, "PRODUCTO", boldbord)
+		worksheet.write(x,12, "CANTIDAD", boldbord)
+		worksheet.write(x,13, "VENTA TOTAL SIN IMPUESTO", boldbord)
+		worksheet.write(x,14, "IGV", boldbord)
+		worksheet.write(x,15, "TOTAL", boldbord)
+		worksheet.write(x,16, "MON", boldbord)
+		worksheet.write(x,17, "MONTO ME", boldbord)
+		worksheet.write(x,18, "TC", boldbord)
+		worksheet.write(x,19, "CANTIDAD DESPACHADA", boldbord)
+		worksheet.write(x,20, "COSTO PROMEDIO PONDERADO", boldbord)
+		worksheet.write(x,21, "COSTO PROMEDIO PONDERADO TOTAL", boldbord)
 		x+=1
 
 
@@ -158,19 +159,20 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,6, item.move_id.partner_id.l10n_latam_identification_type_id.name or '', normal)
 				worksheet.write(x,7, item.move_id.partner_id.vat or '', normal)
 				worksheet.write(x,8, item.move_id.partner_id.name or '', normal)
-				worksheet.write(x,9, item.product_id.default_code or '', normal)
-				worksheet.write(x,10, item.product_id.name or '', normal)
-				worksheet.write(x,11, item.quantity or '', normal)
-				worksheet.write(x,12, (item.quantity*item.price_unit)*item.move_id.currency_rate or '', normal)
+				worksheet.write(x,9, item.move_id.invoice_user_id.name or '', normal)
+				worksheet.write(x,10, item.product_id.default_code or '', normal)
+				worksheet.write(x,11, item.product_id.name or '', normal)
+				worksheet.write(x,12, item.quantity or '', normal)
+				worksheet.write(x,13, (item.quantity*item.price_unit)*item.move_id.currency_rate or '', normal)
 				impuestos = item.tax_ids
 				lista_impuestos = []
 				for impuesto in impuestos:
 					lista_impuestos.append(impuesto.amount)
-				worksheet.write(x,13, ((sum(lista_impuestos)/100) *item.quantity*item.price_unit)*item.move_id.currency_rate  or '', normal)
-				worksheet.write(x,14, item.move_id.amount_total*item.move_id.currency_rate  or '', normal)
-				worksheet.write(x,15, item.move_id.currency_id.name  or '', normal)
-				worksheet.write(x,16, item.move_id.amount_total  or '', normal)
-				worksheet.write(x,17, item.move_id.currency_rate  or '', normal)
+				worksheet.write(x,14, ((sum(lista_impuestos)/100) *item.quantity*item.price_unit)*item.move_id.currency_rate  or '', normal)
+				worksheet.write(x,15, item.move_id.amount_total*item.move_id.currency_rate  or '', normal)
+				worksheet.write(x,16, item.move_id.currency_id.name  or '', normal)
+				worksheet.write(x,17, item.move_id.amount_total  or '', normal)
+				worksheet.write(x,18, item.move_id.currency_rate  or '', normal)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
 				cantidad_entregada_list = []
 				for entrega in pv_fac.picking_ids:
@@ -178,7 +180,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 						for linea_entrega in entrega.move_line_ids_without_package:
 							if linea_entrega.product_id.id == item.product_id.id:
 								cantidad_entregada_list.append(linea_entrega.qty_done)
-								worksheet.write(x,18, sum(cantidad_entregada_list), normal)
+								worksheet.write(x,19, sum(cantidad_entregada_list), normal)
 				query = """select product_id,avg_cost 
 				from kdx_valuation_layer 
 				where product_id= %s
@@ -187,12 +189,12 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				self._cr.execute(query)
 				results = self._cr.dictfetchall()
 				for item_for in results:
-					worksheet.write(x,19, item_for['avg_cost']  or '', decimal2)
-					worksheet.write(x,20, item_for['avg_cost'] * item.quantity  or '', decimal2)
+					worksheet.write(x,20, item_for['avg_cost']  or '', decimal2)
+					worksheet.write(x,21, item_for['avg_cost'] * item.quantity  or '', decimal2)
 				x+=1
 
 
-		size_widths = (2, 13, 13, 5, 7, 11, 11, 13, 20, 5, 20, 8, 8,) + 3 * (8,) + (8, 8, 8)
+		size_widths = (2, 13, 13, 5, 7, 11, 11, 13, 20,20, 5, 20, 8, 8,) + 3 * (8,) + (8, 8, 8)
 
 		worksheet = resize_cells_widths(worksheet, size_widths)
 		workbook.close()
