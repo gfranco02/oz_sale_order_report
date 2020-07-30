@@ -48,7 +48,7 @@
             </field>
         </record>
 
-        <record id="view_account_letras_payment_form_receivables" model="ir.ui.view">
+        <record id="view_account_letras_payment_form_receivables_2" model="ir.ui.view">
             <field name="name">account.letras.payment.inherit.view.form</field>
             <field name="model">account.letras.payment</field>
             <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form"/>
@@ -70,7 +70,7 @@
             </field>
         </record>
 
-        <record id="view_account_letras_payment_manual_form_receivables" model="ir.ui.view">
+        <record id="view_account_letras_payment_manual_form_receivables_cu" model="ir.ui.view">
             <field name="name">account.letras.payment.manual.inherit.view.tree</field>
             <field name="model">account.letras.payment.manual</field>
             <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_manual_form"/>
