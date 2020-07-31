@@ -121,14 +121,19 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,11, item.product_id.name or '', normal)
 				worksheet.write(x,12, item.quantity or '', normal)
 				precio_cantidad = item.price_subtotal
-				print(precio_cantidad)
 				precio_producto = precio_cantidad*item.move_id.currency_rate
 				worksheet.write(x,13, precio_producto or '', normal)
 				impuestos = item.price_total - precio_cantidad
-				worksheet.write(x,14, impuestos  or '', decimal2)
-				worksheet.write(x,15, precio_producto+impuestos  or '', decimal2)
+				worksheet.write(x,14, impuestos*item.move_id.currency_rate  or '', decimal2)
+				worksheet.write(x,15, precio_producto+impuestos*item.move_id.currency_rate  or '', decimal2)
 				worksheet.write(x,16, item.move_id.currency_id.name  or '', decimal2)
-				worksheet.write(x,17, item.move_id.amount_total  or '', normal)
+				if item.move_id.currency_id.name == 'PEN':
+					me = 0
+				else:
+					tot = precio_producto+impuestos*item.move_id.currency_rate
+					tc= item.move_id.currency_rate
+					me = tot/tc
+				worksheet.write(x,17, me  or '', decimal2)
 				worksheet.write(x,18, item.move_id.currency_rate  or '', normal)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
 				cantidad_entregada_list = []
