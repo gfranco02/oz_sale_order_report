@@ -148,6 +148,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				from kdx_valuation_layer 
 				where product_id= %s
 				and to_char(date_done,'YYYY-MM-DD') = '%s'
+				ORDER BY date_done DESC, is_landed_cost DESC, id DESC 
 				"""%(item.product_id.id,item.date)
 				self._cr.execute(query)
 				results = self._cr.dictfetchall()
