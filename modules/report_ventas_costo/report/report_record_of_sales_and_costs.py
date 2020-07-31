@@ -155,7 +155,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,21, 0.00, decimal2)
 				for item_for in results:
 					worksheet.write(x,20, item_for['avg_cost'] or 0.00, decimal2)
-					worksheet.write(x,21, item_for['avg_cost'] * item.quantity or 0.00, normal)
+					worksheet.write(x,21, item_for['avg_cost'] * item.quantity or 0.00, decimal2)
 				x+=1
 
 
