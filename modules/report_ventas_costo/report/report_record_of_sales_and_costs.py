@@ -144,11 +144,11 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 							if linea_entrega.product_id.id == item.product_id.id:
 								cantidad_entregada_list.append(linea_entrega.qty_done)
 								worksheet.write(x,19, sum(cantidad_entregada_list) or 0.00, decimal2)
-				query = """select product_id,avg_cost 
+				query = """select product_id,avg_cost,to_char(date_done,'YYYY-MM-DD')
 				from kdx_valuation_layer 
 				where product_id= %s
-				order by create_date desc limit 1
-				"""%(item.product_id.id)
+				and to_char(date_done,'YYYY-MM-DD') = '%s'
+				"""%(item.product_id.id,item.date)
 				self._cr.execute(query)
 				results = self._cr.dictfetchall()
 				worksheet.write(x,20, 0.00, decimal2)
