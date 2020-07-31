@@ -137,12 +137,13 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,18, item.move_id.currency_rate  or '', normal)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
 				cantidad_entregada_list = []
+				worksheet.write(x,19, 0.00, decimal2)
 				for entrega in pv_fac.picking_ids:
 					if entrega.state == 'done' and entrega.origin == item.move_id.invoice_origin:
 						for linea_entrega in entrega.move_line_ids_without_package:
 							if linea_entrega.product_id.id == item.product_id.id:
 								cantidad_entregada_list.append(linea_entrega.qty_done)
-								worksheet.write(x,19, sum(cantidad_entregada_list), normal)
+								worksheet.write(x,19, sum(cantidad_entregada_list) or 0.00, decimal2)
 				query = """select product_id,avg_cost 
 				from kdx_valuation_layer 
 				where product_id= %s
@@ -150,9 +151,11 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				"""%(item.product_id.id)
 				self._cr.execute(query)
 				results = self._cr.dictfetchall()
+				worksheet.write(x,20, 0.00, decimal2)
+				worksheet.write(x,21, 0.00, decimal2)
 				for item_for in results:
-					worksheet.write(x,20, item_for['avg_cost']  or '', decimal2)
-					worksheet.write(x,21, item_for['avg_cost'] * item.quantity  or '', decimal2)
+					worksheet.write(x,20, item_for['avg_cost'] or 0.00, decimal2)
+					worksheet.write(x,21, item_for['avg_cost'] * item.quantity or 0.00, normal)
 				x+=1
 
 
