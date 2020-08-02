@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <record id="template_dotmatrix_so" model="mail.template">
+    <data> <!-- ORIGINAL RODRI-->
+<!--         <record id="tmpl_dotmatrix_account_letters_it" model="mail.template">
             <field name="name">Dot Matrix Letters</field>
             <field name="model_id" ref="purchase.model_purchase_order"/>
             <field name="subject">Dot Matrix Template for Letters</field>
@@ -49,9 +49,86 @@
                 % endif
             % endfor
             ]]></field>
+        </record> -->
+
+
+        <record id="tmpl_dotmatrix_account_letters_it" model="mail.template">
+            <field name="name">Dot Matrix Letters</field>
+            <field name="model_id" ref="account_letras_it.model_account_letras_payment_manual"/>
+            <field name="subject">Dot Matrix Template for Letters</field>
+            <field name="body_html"><![CDATA[
+                        ${''.ljust(10)}
+
+
+
+
+
+
+
+
+                        ${object.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${object.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${object.currency_id.name} ${"{:,.2f}".format(object.imp_div)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                    ${object.get_amount_text()}
+
+                    ${''.ljust(10)}
+                    ${object.partner_id.name.ljust(29)}
+                    ${object.partner_id.street[:47].ljust(29)}
+                    ${object.partner_id.street[47:].ljust(29)}
+                               
+                    ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
+                    ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
+
+
+                    ${''.ljust(17)}${object.letra_payment_id.aval_permanente.name or ''.ljust(10)}
+                    ${''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.state_id.name or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.vat or ''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+            
+
+            ]]></field>
         </record>
 
-        <record id="template_dotmatrix_so_2" model="mail.template">
+
+        <record id="tmpl_preview_account_letters_it" model="mail.template">
+            <field name="name">Dot Matrix Letters preview</field>
+            <field name="model_id" ref="account_letras_it.model_account_letras_payment_manual"/>
+            <field name="subject">Dot Matrix Template for Letters</field>
+            <field name="body_html"><![CDATA[
+                        ${''.ljust(10)}
+                        ${object.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${object.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${object.currency_id.name} ${"{:,.2f}".format(object.imp_div)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
+                    ${object.get_amount_text()}
+
+                    ${''.ljust(10)}
+                    ${object.partner_id.name.ljust(29)}
+                    ${object.partner_id.street[:47].ljust(29)}
+                    ${object.partner_id.street[47:].ljust(29)}
+                               
+                    ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
+                    ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
+
+
+                    ${''.ljust(17)}${object.letra_payment_id.aval_permanente.name or ''.ljust(10)}
+                    ${''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.state_id.name or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.vat or ''.ljust(10)}]]></field>
+        </record>
+
+        
+        <!-- TODO ORIGINAL RODRI? -->
+<!--         <record id="template_dotmatrix_so_2" model="mail.template">
             <field name="name">Dot Matrix Letters 2</field>
             <field name="model_id" ref="purchase.model_purchase_order"/>
             <field name="subject">Dot Matrix Template for Letters 2</field>
@@ -98,6 +175,6 @@
                 % endif
             % endfor
             ]]></field>
-        </record>
+        </record> -->
     </data>
 </odoo>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report
+        id="report_letters_a4_format"
+        string="Formato PDF"
+        model="account.letras.payment.manual"
+        report_type="qweb-pdf"
+        file="toscana_account_letras.report_letters_toscana_a4_pdf"
+        name="toscana_account_letras.report_letters_toscana_a4_pdf"
+        print_report_name="'LETRAS CANJE - %s' % (object.nro_letra)"
+        menu="False"
+    />
+    
+    <!-- model="account.letras.payment" -->
+    <!-- name="print_letters.report_letters_bo_it_grupo_solutions" -->
+   <template id="report_letters_toscana_a4_pdf">
+        <t t-call="web.html_container">
+           <div class="header">
+            </div>
+            <div class="footer">
+            </div>
+            <style type="text/css">
+                .contenedor{
+                    position: relative;
+                    display: inline-block;
+                    text-align: center;
+                }
+                
+                .imagen-encima{
+                    position: absolute;
+                    top: 40px;
+                    left: 220px;
+                }
+
+                .texto-datos-logo-1{
+                    position: absolute;
+                    top: 50px;
+                    left: 400px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-2{
+                    position: absolute;
+                    top: 60px;
+                    left: 400px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-3{
+                    position: absolute;
+                    top: 70px;
+                    left: 400px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-4{
+                    position: absolute;
+                    top: 70px;
+                    left: 760px;
+                    font-size: 15px;
+                    font-weight: bold;
+                }
+
+                .texto-numero{
+                    position: absolute;
+                    top: 120px;
+                    left: 220px;
+                    font-size: 14px;
+                }
+
+                .texto-ref-girador{
+                    position: absolute;
+                    top: 120px;
+                    left: 315px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-giro{
+                    position: absolute;
+                    top: 135px;
+                    left: 450px;
+                    font-size: 11px;
+                }
+
+                .texto-lugar-giro{
+                    position: absolute;
+                    top: 120px;
+                    left: 590px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-vencimiento{
+                    position: absolute;
+                    top: 135px;
+                    left: 680px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-cantidad{
+                    position: absolute;
+                    top: 120px;
+                    left: 820px;
+                    font-size: 16px;
+                }
+
+                .texto-empresa{
+                    position: absolute;
+                    top: 161px;
+                    left: 620px;
+                    font-size: 10px;
+                }
+
+                .texto-numero-letra{
+                    position: absolute;
+                    top: 183px;
+                    left: 220px;
+                    font-size: 10px;
+                }
+                .texto-nombre-partner{
+                    position: absolute;
+                    top: 230px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+
+                .texto-direccion-partner{
+                    position: absolute;
+                    top: 250px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                                
+                .texto-ruc-compania{
+                    position: absolute;
+                    top: 398px;
+                    left: 680px;
+                    font-size: 11px;
+                }
+
+                .texto-cliente-ruc{
+                    position: absolute;
+                    top: 290px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                .texto-cliente-localidad{
+                    position: absolute;
+                    top: 295px;
+                    left: 400px;
+                    font-size: 11px;
+                }
+                .texto-cliente-telefono{
+                    position: absolute;
+                    top: 305px;
+                    left: 400px;
+                    font-size: 11px;
+                }
+
+                .aval-domicilio{
+                    position: absolute;
+                    top: 347px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                .aval-localidad{
+                    position: absolute;
+                    top: 377px;
+                    left: 280px;
+                    font-size: 11px;
+                }
+                .aval-ruc{
+                    position: absolute;
+                    top: 387px;
+                    left: 280px;
+                    font-size: 11px;
+                }
+
+            </style>
+           <!--  <t t-foreach="docs.letras_manual_ids" t-as="o"> -->
+            <t t-foreach="docs" t-as="o">
+            <!-- <t t-if="o.print_letter == true"> -->
+                <div class="contenedor">
+                    <img src="https://raw.githubusercontent.com/RodrigoD215/LADISAC/master/Letras.png" style="max-height: 440px;" />
+                     <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)"
+                                        style="max-height: 50px;" class="imagen-encima"/>
+
+                    <div class="texto-datos-logo-1"><span t-field="o.company_id.street"/></div>
+                    <div class="texto-datos-logo-2">T.:<span t-field="o.company_id.phone"/></div>
+                    <div class="texto-datos-logo-3">E.:<span t-field="o.company_id.email"/></div>
+                    <div class="texto-datos-logo-4">R.U.C. <span t-field="o.company_id.vat"/></div>
+
+                    <div class="texto-numero"><span t-field="o.nro_letra"/></div>
+                    <div class="texto-ref-girador"><span t-field="o.company_id.vat"/></div>
+                    <div class="texto-fecha-giro"><span t-field="o.date"/></div>
+                    <div class="texto-lugar-giro">LIMA</div>
+                    <div class="texto-fecha-vencimiento"><span t-field="o.expiration_date"/></div>
+                    <div class="texto-fecha-cantidad"><span t-field="o.imp_div"/><span t-field="o.currency_id.name"/></div>
+
+
+                    <div class="texto-empresa"><span t-field="o.company_id.name"/>, la cantidad de: .</div>
+                   <!--  <div class="texto-numero-letra"><span t-field="o.number_letter"/> <span t-field="o.leter_currency"/>.</div> -->
+                    <div class="texto-numero-letra"><span t-esc="o.get_amount_text()"/>.</div>
+
+                    <div class="texto-nombre-partner"><span t-field="o.partner_id.name"/> . </div>
+                    <div class="texto-direccion-partner"><span t-field="o.partner_id.street"/> . </div>
+                    
+                    <div class="texto-cliente-ruc"><span t-field="o.partner_id.vat"/></div>
+                    <div class="texto-cliente-localidad"><span t-field="o.partner_id.state_id.name"/></div>
+                    <div class="texto-cliente-telefono"><span t-field="o.partner_id.phone"/></div>
+
+                    <div class="aval-domicilio"><span t-field="o.letra_payment_id.aval_permanente.street"/></div>
+                    <div class="aval-localidad"><span t-field="o.letra_payment_id.aval_permanente.state_id.name"/></div>
+                    <div class="aval-ruc"><span t-field="o.letra_payment_id.aval_permanente.vat"/></div>
+
+                    <div class="texto-ruc-compania"><span t-field="o.company_id.vat"/></div>
+
+                </div>
+            </t>
+            </t>
+        </template>
+
+ <!--            <div class="report">
+            <div class="header">
+            </div>
+            <div class="footer">
+            </div>
+            <style type="text/css">
+                .contenedor{
+                    position: relative;
+                    display: inline-block;
+                    text-align: center;
+                }
+                
+                .imagen-encima{
+                    position: absolute;
+                    top: 40px;
+                    left: 220px;
+                }
+
+                .texto-datos-logo-1{
+                    position: absolute;
+                    top: 50px;
+                    left: 400px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-2{
+                    position: absolute;
+                    top: 60px;
+                    left: 400px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-3{
+                    position: absolute;
+                    top: 70px;
+                    left: 400px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                .texto-datos-logo-4{
+                    position: absolute;
+                    top: 70px;
+                    left: 760px;
+                    font-size: 15px;
+                    font-weight: bold;
+                }
+
+                .texto-numero{
+                    position: absolute;
+                    top: 120px;
+                    left: 220px;
+                    font-size: 14px;
+                }
+
+                .texto-ref-girador{
+                    position: absolute;
+                    top: 120px;
+                    left: 315px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-giro{
+                    position: absolute;
+                    top: 135px;
+                    left: 450px;
+                    font-size: 11px;
+                }
+
+                .texto-lugar-giro{
+                    position: absolute;
+                    top: 120px;
+                    left: 590px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-vencimiento{
+                    position: absolute;
+                    top: 135px;
+                    left: 680px;
+                    font-size: 11px;
+                }
+
+                .texto-fecha-cantidad{
+                    position: absolute;
+                    top: 120px;
+                    left: 820px;
+                    font-size: 16px;
+                }
+
+                .texto-empresa{
+                    position: absolute;
+                    top: 161px;
+                    left: 620px;
+                    font-size: 10px;
+                }
+
+                .texto-numero-letra{
+                    position: absolute;
+                    top: 183px;
+                    left: 220px;
+                    font-size: 10px;
+                }
+                .texto-nombre-partner{
+                    position: absolute;
+                    top: 230px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+
+                .texto-direccion-partner{
+                    position: absolute;
+                    top: 250px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                                
+                .texto-ruc-compania{
+                    position: absolute;
+                    top: 398px;
+                    left: 680px;
+                    font-size: 11px;
+                }
+
+                .texto-cliente-ruc{
+                    position: absolute;
+                    top: 290px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                .texto-cliente-localidad{
+                    position: absolute;
+                    top: 295px;
+                    left: 400px;
+                    font-size: 11px;
+                }
+                .texto-cliente-telefono{
+                    position: absolute;
+                    top: 305px;
+                    left: 400px;
+                    font-size: 11px;
+                }
+
+                .aval-domicilio{
+                    position: absolute;
+                    top: 347px;
+                    left: 220px;
+                    font-size: 11px;
+                }
+                .aval-localidad{
+                    position: absolute;
+                    top: 377px;
+                    left: 280px;
+                    font-size: 11px;
+                }
+                .aval-ruc{
+                    position: absolute;
+                    top: 387px;
+                    left: 280px;
+                    font-size: 11px;
+                }
+
+            </style>
+            <t t-foreach="docs.letras_manual_ids" t-as="o">
+                <div class="contenedor">
+                    <img src="https://raw.githubusercontent.com/RodrigoD215/LADISAC/master/Letras.png" style="max-height: 440px;" />
+                     <img t-if="docs.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(docs.company_id.logo)"
+                                        style="max-height: 50px;" class="imagen-encima"/>
+
+                    <div class="texto-datos-logo-1"><span t-field="docs.company_id.street"/></div>
+                    <div class="texto-datos-logo-2">T.:<span t-field="docs.company_id.phone"/></div>
+                    <div class="texto-datos-logo-3">E.:<span t-field="docs.company_id.email"/></div>
+                    <div class="texto-datos-logo-4">R.U.C. <span t-field="docs.company_id.vat"/></div>
+
+                    <div class="texto-numero"><span t-field="o.nro_letra"/></div>
+                    <div class="texto-ref-girador"><span t-field="docs.company_id.vat"/></div>
+                    <div class="texto-fecha-giro"><span t-field="docs.date"/></div>
+                    <div class="texto-lugar-giro">LIMA</div>
+                    <div class="texto-fecha-vencimiento"><span t-field="o.expiration_date"/></div>
+                    <div class="texto-fecha-cantidad"><span t-field="o.imp_div"/><span t-field="o.currency_id.name"/></div>
+
+
+                    <div class="texto-empresa"><span t-field="docs.company_id.name"/>, la cantidad de: .</div>
+                    <div class="texto-numero-letra"><span t-field="o.number_letter"/> .</div>
+                    
+                    <div class="texto-nombre-partner"><span t-field="docs.partner_id.name"/> . </div>
+                    <div class="texto-direccion-partner"><span t-field="docs.partner_id.street"/> . </div>
+                    
+                    <div class="texto-cliente-ruc"><span t-field="docs.partner_id.vat"/></div>
+                    <div class="texto-cliente-localidad"><span t-field="docs.partner_id.state_id.name"/></div>
+                    <div class="texto-cliente-telefono"><span t-field="docs.partner_id.phone"/></div>
+
+                    <div class="aval-domicilio"><span t-field="docs.aval_permanente.street"/></div>
+                    <div class="aval-localidad"><span t-field="docs.aval_permanente.state_id.name"/></div>
+                    <div class="aval-ruc"><span t-field="docs.aval_permanente.vat"/></div>
+
+                    <div class="texto-ruc-compania"><span t-field="docs.company_id.vat"/></div>
+
+                </div>
+            </t> -->
+
+
+
+
+
+<!-- 
+    <template id="report_letters_bo_it_grupo_solutions_inhetit" inherit_id="print_letters.report_letters_bo_it_grupo_solutions">
+    <xpath expr="//div[@class='report']" position="replace">
+ 
+
+        </xpath>
+    </template> -->
+
+</odoo>

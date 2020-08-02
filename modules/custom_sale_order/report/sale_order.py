@@ -32,14 +32,12 @@ col_widths1 = [float(i)/100*wUtil for i in (37,25,12)] # size of columns (list s
 col_widths2 = [float(i)/100*wUtil for i in (7,6,6,6,6,6,7,6,6,6,6,6,7,20)] # size of columns (list sum = 100%)
 
 separator = 12 # separador entre lineas
-# register_fonts(['Calibri', 'Calibri-Bold'])
-pdfmetrics.registerFont(TTFont('Calibri', 'Calibri.ttf'))
-pdfmetrics.registerFont(TTFont('Calibri-Bold', 'CalibriBold.ttf'))
+register_fonts(['Calibri', 'Calibri-Bold'])
 
 p1 = ParagraphStyle('p1',alignment=TA_CENTER,fontSize=8,fontName="Calibri-Bold")
-p1_1 = ParagraphStyle('p1',alignment=TA_LEFT,fontSize=8,fontName="Calibri-Bold")
+p1_1 = ParagraphStyle('p1_1',alignment=TA_LEFT,fontSize=8,fontName="Calibri-Bold")
 p2 = ParagraphStyle('p2',alignment=TA_LEFT,fontSize=7,fontName="Calibri")
-p2_1 = ParagraphStyle('p2',alignment=TA_CENTER,fontSize=7,fontName="Calibri")
+p2_1 = ParagraphStyle('p2_1',alignment=TA_CENTER,fontSize=7,fontName="Calibri")
 p3 = ParagraphStyle('p3',alignment=TA_LEFT,fontSize=10,fontName="Calibri")
 p4 = ParagraphStyle('p4',alignment=TA_RIGHT,fontSize=10,fontName="Calibri")
 p5 = ParagraphStyle('p5',alignment=TA_RIGHT,fontSize=10,fontName="Calibri-Bold")
@@ -55,6 +53,8 @@ TF_1 = ParagraphStyle('p2',alignment=TA_CENTER,fontSize=9,fontName="Calibri")
 class SaleOrder(models.Model):
 	_inherit='sale.order'
 
+	delivery_agency = fields.Char(u'Agencia de envío') # que hacía ésta mrd en letras?? 
+
 	def build_report_pdf(self):
 		if self.state == 'draft':
 			name_state = u'COTIZACIÓN'
@@ -63,13 +63,11 @@ class SaleOrder(models.Model):
 		if self.state != 'sale' and self.state != 'draft':
 			name_state = u'Presupuesto-Pedido'
 
-		path = self.env['main.parameter'].sudo().search([])[0].dir_download
+		path = self.env['report.it'].get_reports_path()
 		# path = self.env['res.config.settings'].search([('path_reports','!=',False)],limit=1).path_reports
 		now = fields.Datetime.context_timestamp(self,datetime.now())
 		name = name_state
 		file_name = u'S.0. %s %s.pdf'%(name,str(now)[:19].replace(':','_'))
-		if path == False:
-			raise UserError('Ingrese a Configuración > Reportes > Path y verifique que tiene una ruta de descarga')
 		path += file_name
 		c = canvas.Canvas(path , pagesize=(595,842))
 		pos = hPage - 90
@@ -366,13 +364,7 @@ class SaleOrder(models.Model):
 		c.setTitle(file_name)
 		c.setSubject('Reportes')
 		c.save()
-		with open(path,'rb') as file:
-			export = self.env['export.file.manager'].create({
-				'file_name': file_name,
-				'content_type':'application/pdf',
-				'file': base64.b64encode(file.read()),	
-			})
-		return export.export_file(clear=True,path=path)
+		return self.env['report.it'].export_file(path, file_name)
 
 	# def get_query_1(self):
 	# 	return """
