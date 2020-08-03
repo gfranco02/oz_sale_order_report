@@ -66,7 +66,7 @@
 
 
 
-                        ${object.nro_letra[5:].ljust(10)} ${object.company_id.vat.ljust(18)} ${object.date.strftime('%d-%m-%Y')} ${object.company_id.state_id.name.rjust(13)} ${''.ljust(10)} ${object.expiration_date.strftime('%d-%m-%Y')} ${''.ljust(7)} ${object.currency_id.name} ${"{:,.2f}".format(object.imp_div)}
+                        ${object.nro_letra[5:].ljust(10)} ${(object.company_id.vat or '').ljust(18)} ${object.date.strftime('%d-%m-%Y') if object.date else ''} ${(object.company_id.state_id.name or '').rjust(13)} ${''.ljust(10)} ${object.expiration_date.strftime('%d-%m-%Y') if object.expiration_date else ''} ${''.ljust(7)} ${(object.currency_id.name or '')} ${"{:,.2f}".format(object.imp_div)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
