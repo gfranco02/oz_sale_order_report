@@ -141,7 +141,7 @@ class AccountLetrasPaymentManual(models.Model):
 			amount_total    = curr_symbol + ' {:,.2f}'.format(Decimal("%0.2f" % (line.imp_div + line.withdrawal_cost)))
 
 			data = [
-				[Paragraph(fecha_ven, p2),Paragraph(invoices, p2),Paragraph(cu_banco, p2), Paragraph(letter_name, p2), Paragraph(partner.name, p2), Paragraph(amount_letter, p4),Paragraph(withdrawal_cost, p4), Paragraph(amount_total, p4)],
+				[Paragraph(fecha_ven or '', p2),Paragraph(invoices or '', p2),Paragraph(letter_name or '', p2), Paragraph(cu_banco or '', p2), Paragraph(partner.name or '', p2), Paragraph(amount_letter or '', p4),Paragraph(withdrawal_cost or '', p4), Paragraph(amount_total or '', p4)],
 			]
 			t=Table(data, colWidths=col_widths)
 
@@ -199,7 +199,7 @@ class AccountLetrasPaymentManual(models.Model):
 		pos -= separator
 		
 		
-		c.drawImage(ImageReader(get_encoded_image(self.env.company.logo)), 200, 20, width=180, height=50, mask='auto')
+		# c.drawImage(ImageReader(get_encoded_image(self.env.company.logo)), 200, 20, width=180, height=50, mask='auto')
 		c.setFont("Calibri", 10)
 		c.drawString(465,70,u'Calle Manuel A. Odria 268')
 		c.drawString(506,60,u'LIMA -Ate -Perú')
