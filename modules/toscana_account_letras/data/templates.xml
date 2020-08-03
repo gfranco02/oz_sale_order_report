@@ -77,12 +77,12 @@
                     ${object.partner_id.name[47:].ljust(29)}
                     ${object.partner_id.street[:47].ljust(29)}
                     ${object.partner_id.street[47:].ljust(29)}
-                    ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
+                    ${object.partner_id.vat.ljust(30)} ${object.partner_id.state_id.name.ljust(10)}
                     ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
 
                     ${''.ljust(17)}${object.letra_payment_id.aval_permanente.name or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[:47] or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[47:] or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[:43] or ''.ljust(10)}
+                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[43:] or ''.ljust(10)}
                     ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.state_id.name or ''.ljust(10)}
                     ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.vat or ''.ljust(10)}
                         ${''.ljust(10)}
