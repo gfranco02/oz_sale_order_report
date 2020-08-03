@@ -77,7 +77,6 @@
                     ${object.partner_id.street[:47].ljust(29)}
                     ${object.partner_id.street[47:].ljust(29)}
                                
-                               
                     ${object.partner_id.vat.ljust(1)}${object.partner_id.state_id.name.rjust(27)}
                     ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
 
