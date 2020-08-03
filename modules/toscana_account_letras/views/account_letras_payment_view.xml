@@ -1,50 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+
+    <record id="print_card_format_srv_action" model="ir.actions.server">
+        <field name="name">Formato Carta</field> <!-- nombre provisional --> 
+        <field name="model_id" ref="account_letras_it.model_account_letras_payment_manual" />
+        <field name="binding_model_id" ref="account_letras_it.model_account_letras_payment_manual"/>
+        <field name="binding_type">report</field>
+        <field name="state">code</field>
+        <field name="code">action=records.action_print_card_format_format()</field>
+    </record>
+
     <data>
-<!--         <record id="view_account_letras_payment_manual_form_receivables" model="ir.ui.view">
-            <field name="name">account.letras.payment.inherit.view.tree</field>
-            <field name="model">account.letras.payment</field>
-            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='nro_letra']" position="after">
-                    <field name="leter_currency" invisible="1"></field>
-               </xpath>
-            </field>
-        </record> -->
-
-<!--          <record id="view_account_letras_payment_form_receivables_inherit" model="ir.ui.view">
-            <field name="name">account_letras_payment_inherit</field>
-            <field name="model">account.letras.payment</field>
-            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='generate_report_file'][1]" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='letras_manual_ids']" position="after">
-                        <div>
-                            <label for="title" string="Impresión:" style="font-weight: bold; font-size: 16px;"/>
-                            <group>
-                                <group>
-                                    <field name="type_impresion" widget="radio"></field>
-                                </group>
-                                <group>
-                                    <button type="object" name="generate_report_file" string="Imprimir Letras" icon="fa-print"  attrs="{'invisible': [('state','=','draft')]}"/>
-                                    <label for="note" string="Debe de comprobar el documento para poder imprimir letras" attrs="{'invisible': [('state','in',('check','done'))]}" />
-                                </group>
-                            </group>
-                        </div>
-                </xpath>
-            </field>
-        </record> -->
-
         <record id="view_account_letras_payment_form" model="ir.ui.view">
             <field name="name">account.letras.payment.inherit.view.form</field>
             <field name="model">account.letras.payment</field>
             <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form"/>
             <field name="arch" type="xml">
-               <!--  <xpath expr="//notebook/page/field[@name='letras_manual_ids']/tree/field[@name='credit']" position="after">
-                    <field name="print_letter" widget="boolean_toggle" readonly="0"></field>
-               </xpath> -->
                 <xpath expr="//notebook/page/field[@name='letras_manual_ids']/tree/field[@name='currency_id']" position="before">
                     <field name="cu_banco"></field>
                </xpath>
@@ -53,17 +24,6 @@
                </xpath>
             </field>
         </record>
-
-        <!-- <record id="view_account_letras_payment_form_receivables_2" model="ir.ui.view">
-            <field name="name">account.letras.payment.inherit.view.form</field>
-            <field name="model">account.letras.payment</field>
-            <field name="inherit_id" ref="account_letras_it.view_account_letras_payment_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//notebook/page/field[@name='letras_manual_ids']/tree/field[@name='currency_id']" position="before">
-                    <field name="cu_banco"></field>
-               </xpath>
-            </field>
-        </record> -->
         
         <record id="view_account_letras_payment_manual_tree" model="ir.ui.view">
             <field name="name">account.letras.payment.manual.inherit.view.tree</field>

@@ -1,0 +1,1 @@
+from . import letras_manual_report
