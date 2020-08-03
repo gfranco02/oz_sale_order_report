@@ -89,11 +89,17 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		x+=1
 
 
-		facturas_total = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', self.period_end),('type', '=', 'out_invoice'),('state', '=', 'posted')])
+		facturas_total = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', self.period_end),('type', 'in', ('out_invoice','out_refund')),('state', '=', 'posted')])
+
+		facturas_total_rectificativas = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', self.period_end),('type', '=', 'out_refund'),('state', '=', 'posted')])
 
 		facturas_list = []
 		for facturas_to in facturas_total:
 			facturas_list.extend(facturas_to.invoice_line_ids.ids)
+
+		facturas_rectificativas_list = []
+		for facturas_to_2 in facturas_total_rectificativas:
+			facturas_rectificativas_list.extend(facturas_to_2.invoice_line_ids.ids)
 		
 		pedido_venta = self.env['sale.order'].sudo()
 
@@ -121,11 +127,20 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,11, item.product_id.name or '', normal)
 				worksheet.write(x,12, item.quantity or '', normal)
 				precio_cantidad = item.price_subtotal
-				precio_producto = precio_cantidad*item.move_id.currency_rate
-				worksheet.write(x,13, precio_producto or '', normal)
-				impuestos = item.price_total - precio_cantidad
-				worksheet.write(x,14, impuestos*item.move_id.currency_rate  or '', decimal2)
-				worksheet.write(x,15, precio_producto+impuestos*item.move_id.currency_rate  or '', decimal2)
+				
+				if item.id in facturas_rectificativas_list:
+					precio_producto = precio_cantidad*item.move_id.currency_rate
+					worksheet.write(x,13, -precio_producto or '', normal)
+					impuestos = item.price_total - precio_cantidad
+					worksheet.write(x,14, -(impuestos*item.move_id.currency_rate)  or '', decimal2)
+					worksheet.write(x,15,-(precio_producto+impuestos*item.move_id.currency_rate)  or '', decimal2)
+				else:
+					precio_producto = precio_cantidad*item.move_id.currency_rate
+					worksheet.write(x,13, precio_producto or '', normal)
+					impuestos = item.price_total - precio_cantidad
+					worksheet.write(x,14, impuestos*item.move_id.currency_rate  or '', decimal2)
+					worksheet.write(x,15, precio_producto+impuestos*item.move_id.currency_rate  or '', decimal2)
+
 				worksheet.write(x,16, item.move_id.currency_id.name  or '', decimal2)
 				if item.move_id.currency_id.name == 'PEN':
 					me = 0

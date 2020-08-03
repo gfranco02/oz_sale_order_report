@@ -38,7 +38,7 @@ class AccountLetrasPaymentManual(models.Model):
 		pos = hPage - 150
 		separator = 12
 		bottom = 55
-		col_widths = [float(i)/100*wUtil for i in (11,15, 7,10, 19, 12, 15, 11)]
+		col_widths = [float(i)/100*wUtil for i in (13,14,7,9,10,19,10,10,10)]
 		
 
 		p1 = ParagraphStyle('p1', alignment=TA_CENTER, fontSize=8, fontName="Calibri-Bold")
@@ -81,7 +81,7 @@ class AccountLetrasPaymentManual(models.Model):
 		def header_table(c, pos):
 			data=[
 				[Paragraph("ESTADO DE CUENTA", p8), '', '', '', '', ''],
-				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("CU BANCO", p9), Paragraph("CLIENTE", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
+				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("CU BANCO", p9),Paragraph("BANCO", p9), Paragraph("CLIENTE", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
 			]
 			hTable=Table(data, colWidths=col_widths, rowHeights=(32))
 			hTable.setStyle(TableStyle([
@@ -139,9 +139,10 @@ class AccountLetrasPaymentManual(models.Model):
 			amount_letter   = curr_symbol + ' {:,.2f}'.format(Decimal("%0.2f" % line.imp_div))
 			withdrawal_cost = curr_symbol + ' {:,.2f}'.format(Decimal("%0.2f" % line.withdrawal_cost))
 			amount_total    = curr_symbol + ' {:,.2f}'.format(Decimal("%0.2f" % (line.imp_div + line.withdrawal_cost)))
+			banco = line.bank_id.name
 
 			data = [
-				[Paragraph(fecha_ven or '', p2),Paragraph(invoices or '', p2),Paragraph(letter_name or '', p2), Paragraph(cu_banco or '', p2), Paragraph(partner.name or '', p2), Paragraph(amount_letter or '', p4),Paragraph(withdrawal_cost or '', p4), Paragraph(amount_total or '', p4)],
+				[Paragraph(fecha_ven or '', p2),Paragraph(invoices or '', p2),Paragraph(letter_name or '', p2), Paragraph(cu_banco or '', p2),Paragraph(banco or '', p2), Paragraph(partner.name or '', p2), Paragraph(amount_letter or '', p4),Paragraph(withdrawal_cost or '', p4), Paragraph(amount_total or '', p4)],
 			]
 			t=Table(data, colWidths=col_widths)
 
