@@ -317,7 +317,7 @@ class SaleOrder(models.Model):
 
 			moneda=str(self.currency_id.symbol)
 
-			data=[[Paragraph(moneda + str(sum(precios_s_descuento)) or '',p2_1),Paragraph(moneda + str(descuento)or '',p2_1),Paragraph(moneda + str(self.amount_untaxed),p2_1),Paragraph(moneda + str(self.amount_tax),p2_1),Paragraph(moneda + str(self.amount_total),p2_1)],]
+			data=[[Paragraph(moneda + str(round(sum(precios_s_descuento),2)) or '',p2_1),Paragraph(moneda + str(descuento)or '',p2_1),Paragraph(moneda + str(self.amount_untaxed),p2_1),Paragraph(moneda + str(self.amount_tax),p2_1),Paragraph(moneda + str(self.amount_total),p2_1)],]
 			Table_lines=Table(data,colWidths=110.4,rowHeights=(15))
 			Table_lines.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
