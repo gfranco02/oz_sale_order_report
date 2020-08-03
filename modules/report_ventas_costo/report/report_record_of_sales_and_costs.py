@@ -159,20 +159,22 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 							if linea_entrega.product_id.id == item.product_id.id:
 								cantidad_entregada_list.append(linea_entrega.qty_done)
 								worksheet.write(x,19, sum(cantidad_entregada_list) or 0.00, decimal2)
-				query = """select product_id,avg_cost,to_char(date_done,'YYYY-MM-DD')
-				from kdx_valuation_layer 
-				where product_id= %s
-				and to_char(date_done,'YYYY-MM-DD') = '%s'
-				ORDER BY date_done DESC, is_landed_cost DESC, id DESC 
-				"""%(item.product_id.id,item.date)
-				self._cr.execute(query)
-				results = self._cr.dictfetchall()
+				
 				worksheet.write(x,20, 0.00, decimal2)
 				worksheet.write(x,21, 0.00, decimal2)
-				for item_for in results:
-					worksheet.write(x,20, item_for['avg_cost'] or 0.00, decimal2)
-					y = x+1
-					worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
+				if item.product_id.id != False and item.date != False:
+					query = """select product_id,avg_cost,to_char(date_done,'YYYY-MM-DD')
+					from kdx_valuation_layer 
+					where product_id= %s
+					and to_char(date_done,'YYYY-MM-DD') = '%s'
+					ORDER BY date_done DESC, is_landed_cost DESC, id DESC 
+					"""%(item.product_id.id,item.date)
+					self._cr.execute(query)
+					results = self._cr.dictfetchall()
+					for item_for in results:
+						worksheet.write(x,20, item_for['avg_cost'] or 0.00, decimal2)
+						y = x+1
+						worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
 				x+=1
 
 
