@@ -57,6 +57,7 @@
             <field name="model_id" ref="account_letras_it.model_account_letras_payment_manual"/>
             <field name="subject">Dot Matrix Template for Letters</field>
             <field name="body_html"><![CDATA[
+                    % for o in object:
                         ${''.ljust(10)}
 
 
@@ -75,16 +76,16 @@
                     ${''.ljust(10)}
                     ${object.partner_id.name[:47].ljust(29)}
                     ${object.partner_id.name[47:].ljust(29)}
-                    ${object.partner_id.street[:47].ljust(29)}
-                    ${object.partner_id.street[47:].ljust(29)}
-                    ${object.partner_id.vat.ljust(30)} ${object.partner_id.state_id.name.ljust(10)}
-                    ${''.ljust(29)} ${object.partner_id.phone or ''.rjust(3)}
+                    ${(object.partner_id.street or '')[:47].ljust(29)}
+                    ${(object.partner_id.street or '')[47:].ljust(29)}
+                    ${(object.partner_id.vat or '').ljust(30)} ${(object.partner_id.state_id.name or '').ljust(10)}
+                    ${''.ljust(29)} ${(object.partner_id.phone or '').rjust(3)}
 
-                    ${''.ljust(17)}${object.letra_payment_id.aval_permanente.name or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[:43] or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.street[43:] or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.state_id.name or ''.ljust(10)}
-                    ${''.ljust(10)} ${object.letra_payment_id.aval_permanente.vat or ''.ljust(10)}
+                    ${''.ljust(17)}${(object.letra_payment_id.aval_permanente.name or '').ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[:43].ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[43:].ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.state_id.name or '').ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.vat or '').ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
