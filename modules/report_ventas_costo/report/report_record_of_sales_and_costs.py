@@ -88,10 +88,14 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		worksheet.write(x,21, "COSTO PROMEDIO PONDERADO TOTAL", boldbord)
 		x+=1
 
+		from datetime import datetime, timedelta
+		una_fecha = str(self.period_end)
+		fecha_dt = datetime.strptime(una_fecha, '%Y-%m-%d')
+		plus_date = fecha_dt + timedelta(days=1)
 
-		facturas_total = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', self.period_end),('type', 'in', ('out_invoice','out_refund')),('state', '=', 'posted')])
+		facturas_total = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', plus_date),('type', 'in', ('out_invoice','out_refund')),('state', '=', 'posted')])
 
-		facturas_total_rectificativas = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', self.period_end),('type', '=', 'out_refund'),('state', '=', 'posted')])
+		facturas_total_rectificativas = self.env['account.move'].sudo().search([('invoice_date', '>', self.period_ini),('invoice_date', '<', plus_date),('type', '=', 'out_refund'),('state', '=', 'posted')])
 
 		facturas_list = []
 		for facturas_to in facturas_total:
