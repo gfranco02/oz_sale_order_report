@@ -66,6 +66,7 @@
 
 
 
+
                         ${o.nro_letra[5:].ljust(10)} ${(o.company_id.vat or '').ljust(18)} ${o.date.strftime('%d-%m-%Y') if o.date else ''} ${(o.company_id.state_id.name or '').rjust(13)} ${''.ljust(10)} ${o.expiration_date.strftime('%d-%m-%Y') if o.expiration_date else ''} ${''.ljust(7)} ${(o.currency_id.name or '')} ${"{:,.2f}".format(o.imp_div)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
@@ -85,6 +86,8 @@
                     ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.street or '')[43:].ljust(10)}
                     ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.state_id.name or '').ljust(10)}
                     ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.vat or '').ljust(10)}
+                        ${''.ljust(10)}
+                        ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
