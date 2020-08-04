@@ -90,9 +90,6 @@
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
-                        ${''.ljust(10)}
-                        ${''.ljust(10)}
-                        ${''.ljust(10)}
             % endfor
             ]]></field>
         </record>
