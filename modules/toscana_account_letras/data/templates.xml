@@ -103,22 +103,22 @@
             <field name="model_id" ref="account_letras_it.model_account_letras_payment_manual"/>
             <field name="subject">Dot Matrix Template for Letters</field>
                        <field name="body_html"><![CDATA[
-                        ${o.nro_letra[5:].ljust(10)} ${(o.company_id.vat or '').ljust(18)} ${o.date.strftime('%d-%m-%Y') if o.date else ''} ${(o.company_id.state_id.name or '').rjust(13)} ${''.ljust(10)} ${o.expiration_date.strftime('%d-%m-%Y') if o.expiration_date else ''} ${''.ljust(7)} ${(o.currency_id.name or '')} ${"{:,.2f}".format(o.imp_div)}
+                        ${object.nro_letra[5:].ljust(10)} ${(object.company_id.vat or '').ljust(18)} ${object.date.strftime('%d-%m-%Y') if object.date else ''} ${(object.company_id.state_id.name or '').rjust(13)} ${''.ljust(10)} ${object.expiration_date.strftime('%d-%m-%Y') if object.expiration_date else ''} ${''.ljust(7)} ${(object.currency_id.name or '')} ${"{:,.2f}".format(object.imp_div)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
                         ${''.ljust(10)}
-                    ${o.get_amount_text()}
-                    ${o.partner_id.name[:47].ljust(29)}
-                    ${o.partner_id.name[47:].ljust(29)}
-                    ${(o.partner_id.street or '')[:47].ljust(29)}
-                    ${(o.partner_id.street or '')[47:].ljust(29)}
-                    ${(o.partner_id.vat or '').ljust(30)} ${(o.partner_id.state_id.name or '').ljust(10)}
-                    ${''.ljust(29)} ${(o.partner_id.phone or '').rjust(3)}
-                    ${''.ljust(17)}${(o.letra_payment_id.aval_permanente.name or '').ljust(10)}
-                    ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.street or '')[:43].ljust(10)}
-                    ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.street or '')[43:].ljust(10)}
-                    ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.state_id.name or '').ljust(10)}
-                    ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.vat or '').ljust(10)}
+                    ${object.get_amount_text()}
+                    ${object.partner_id.name[:47].ljust(29)}
+                    ${object.partner_id.name[47:].ljust(29)}
+                    ${(object.partner_id.street or '')[:47].ljust(29)}
+                    ${(object.partner_id.street or '')[47:].ljust(29)}
+                    ${(object.partner_id.vat or '').ljust(30)} ${(object.partner_id.state_id.name or '').ljust(10)}
+                    ${''.ljust(29)} ${(object.partner_id.phone or '').rjust(3)}
+                    ${''.ljust(17)}${(object.letra_payment_id.aval_permanente.name or '').ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[:43].ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[43:].ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.state_id.name or '').ljust(10)}
+                    ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.vat or '').ljust(10)}
             ]]></field>
         </record>
 
