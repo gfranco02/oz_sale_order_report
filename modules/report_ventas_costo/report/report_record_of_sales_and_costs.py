@@ -108,7 +108,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		pedido_venta = self.env['sale.order'].sudo()
 
 		for item in self.env['account.move.line'].browse(facturas_list):
-			if item.id in facturas_list:
+			if item.id in facturas_list and item.journal_id.name == 'Facturas de cliente':
 				worksheet.write(x,1, item.move_id.invoice_date or '', fdatetime)
 				worksheet.write(x,2, item.move_id.invoice_date_due or '', fdatetime)
 				worksheet.write(x,3, item.move_id.type_document_id.code or '', normal)
