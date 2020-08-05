@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- assign.production_cost.wizard form view -->
+        <record id="assign_production_cost_wizard_view_form" model="ir.ui.view">
+            <field name="name">assign.production_cost.wizard.view.form</field>
+            <field name="model">assign.production_cost.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Asignación de costo promedio para OP de prod.">
+                <header>
+                    <button string="Refrescar" name="refresh_lines" type="object" class="btn-primary" icon="fa-refresh"
+                    attrs="{'invisible':[('type_assign','!=','from_products')]}"/>
+                </header>
+                        <group>
+                            <field name="picking_id" readonly="1"/>
+                            <field name="operation_code" invisible="1"/>
+                            <field name="type_assign" widget="radio" required="1"/>
+                        </group>
+                        <group>
+                            <field name="line_ids" nolabel="1">
+                                <tree create="false" editable="bottom">
+                                   <field name="wizard_id" invisible="1"/>
+                                   <field name="picking_id" invisible="1"/>
+                                   <field name="move_id" invisible="1"/>
+                                   <field name="product_id"/>
+                                   <field name="price_unit" required="1"/>
+                                   <field name="product_ids" widget="many2many_tags" 
+                                    attrs="{'column_invisible': [('parent.type_assign','!=','from_products')]}"/>
+                                </tree>
+                            </field>
+                        </group>
+                    <footer>
+                        <button string="Asignar costo" name="assign_unit_price_to_moves" type="object" class="btn-primary" icon="fa-bolt"/>
+                        <button string="Cancelar" name="cancel" special="cancel" class="oe_link oe_inline"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
