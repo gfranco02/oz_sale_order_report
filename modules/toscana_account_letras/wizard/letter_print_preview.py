@@ -14,7 +14,8 @@ class LetterPrintPreviewWizard(models.TransientModel):
 		# TODO va a poder imprimirse todo de golpe?
 		# por ahora sólo la primera
 		tpl = self.env.ref('toscana_account_letras.tmpl_dotmatrix_account_letters_it')
-		printer_data = tpl._render_template(tpl.body_html, 'account.letras.payment.manual', letters[0].id)
+		printer_data = tpl._render_template(tpl.body_html, 'account.letras.payment.manual', letters.ids)
+		printer_data = ''.join(printer_data.values())
 		return self.env['printer.selection.wizard'].do_print(printer_data, self.env.company)
 
 	def _preview_dot_matrix(self, letter):
