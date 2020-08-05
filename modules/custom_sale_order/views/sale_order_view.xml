@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_quotation_send'][1]" position="after">
                     <button name="build_report_pdf" string="Imprimir" type="object" attrs="{'invisible':[('state','in', ('done','cancel'))]}"/>
-                    <button name="summi_report_pdf" type="object" attrs="{'invisible':[('state','in', ('done','cancel'))]}" icon="fa-tablet" style="background-color:#fc6404; color: #ffffff;"/>
+                    <button name="summi_report_pdf" type="object" attrs="{'invisible':[('state','in', ('done','cancel'))]}" icon="fa-tablet" style="background-color:#fc6404; color: #ffffff;" help='Formato POS'/>
                 </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="delivery_agency"/>
