@@ -613,8 +613,8 @@ class SaleOrder(models.Model):
 
 		#total en letras
 		c.setFont("Calibri", 9)
-		c.drawString(5,pos-50,'Total: '+str(self.numero_to_letras(self.amount_total or 0.0)))
-		c.drawString(5,pos-60,(str(moneda[0])))
+		c.drawString(5,pos-50,('Total: '+str(self.numero_to_letras(self.amount_total or 0.0)+str(moneda[0])))[:44])
+		c.drawString(5,pos-60,('Total: '+str(self.numero_to_letras(self.amount_total or 0.0)+str(moneda[0])))[44:])
 
 
 		col_widths4 = [float(i)/100*wUtil for i in (50,50)]
