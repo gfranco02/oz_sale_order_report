@@ -13,46 +13,6 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 	period_ini = fields.Date(u'Fecha inicial',default=lambda self: fields.Date.context_today(self))
 	period_end = fields.Date(u'Fecha Final',default=lambda self: fields.Date.context_today(self))
 
-	# def _get_previus_layer(self, location_id,product_id,date_done):
-	# 	# -> Obtener último movimento de product_id en location_id
-	# 	# -> Ordenamiento por fecha, si es gasto vinculado y id
-	# 	# -> Si hubieran 2 compras con gastos vinculados exactamente 
-	# 	# -> en la misma hora, salen primero las compras y luego todos 
-	# 	# -> los GV asociados a ellas.
-	# 	# ****
-		
-	# 	date_done = parse2str_dt(date_done)
-	# 	start_date = '%s-01-01 00:00:00' % date_done[:4]
-
-	# 	params = (start_date, date_done, product_id) + 4 * (location_id,)
-	# 	self.flush()
-	# 	sql = f"""
-	# 	SELECT ARRAY_AGG(T.id)
-	# 	FROM (
-	# 		SELECT 
-	# 		kvl.id
-	# 		FROM 
-	# 		kdx_valuation_layer kvl
-	# 		JOIN stock_move sm ON sm.id = kvl.move_id
-	# 		WHERE sm.state = 'done'
-	# 		AND COALESCE(sm.scrapped, false) = false
-	# 		AND kvl.date_done >= %s 
-	# 		AND kvl.date_done <= %s 
-	# 		AND kvl.product_id = %s 
-	# 		AND (kvl.location_id = %s or kvl.location_dest_id = %s)
-	# 		AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
-	# 			(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
-	# 			OR COALESCE(kvl.is_transfer, false) != true )
-	# 		ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC 
-	# 	)T;"""
-		
-	# 	self._cr.execute(sql, params)
-	# 	arr_values = self._cr.fetchone()[0]
-	# 	index = arr_values.index(self.id) + 1
-	# 	prev_layer_id = arr_values[index : index + 1] or False
-	# 	return self.browse(prev_layer_id)
-	
-	
 	
 	def build_report_excel(self):
 		com = self.env.company
@@ -217,17 +177,12 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,20, 0.00, decimal2)
 				worksheet.write(x,21, 0.00, decimal2)
 				if item.product_id.id != False and item.date != False:
-					query = """select unit_cost,product_id,avg_cost,to_char(date_done,'YYYY-MM-DD')
-					from kdx_valuation_layer 
-					where product_id= %s
-					and date_done = '%s'
-					and location_id = %s
-					ORDER BY date_done DESC, is_landed_cost DESC, id DESC 
-					"""%(item.product_id.id,fechas_list[0],almacen_list[0])
+					query = self.env['kdx.report.wizard']._prepare_sql_kdx_query('valued', self.period_ini, self.period_end, str({almacen_list[0]}), item.product_id.ids)
 					self._cr.execute(query)
 					results = self._cr.dictfetchall()
+					
 					for item_for in results:
-						worksheet.write(x,20, item_for['unit_cost'] or 0.00, decimal2)
+						worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
 						y = x+1
 						worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
 				x+=1
