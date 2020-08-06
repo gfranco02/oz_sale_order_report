@@ -45,8 +45,8 @@ p5 = ParagraphStyle('p5',alignment=TA_RIGHT,fontSize=10,fontName="Calibri-Bold")
 p6 = ParagraphStyle('p6',alignment=TA_LEFT,fontSize=10,fontName="Calibri-Bold")
 p7 = ParagraphStyle('p7',alignment=TA_LEFT,fontSize=11,fontName="Calibri")
 
-S1 = ParagraphStyle('S1',alignment=TA_LEFT,fontSize=7,fontName="Calibri")
-S2 = ParagraphStyle('S1',alignment=TA_CENTER,fontSize=7,fontName="Calibri")
+S1 = ParagraphStyle('S1',alignment=TA_LEFT,fontSize=8,fontName="Calibri")
+S2 = ParagraphStyle('S1',alignment=TA_CENTER,fontSize=8,fontName="Calibri")
 
 
 style = getSampleStyleSheet()["Normal"]
@@ -483,30 +483,30 @@ class SaleOrder(models.Model):
 			header_path=src_path+'/Toscana.JPG'
 			header_logo=ImageReader(header_path)
 			c.drawImage(header_logo,57,hPage-35,width=100,height=30,mask='auto')
-			c.setFont("Calibri-Bold", 7)
+			c.setFont("Calibri-Bold", 9)
 			c.drawCentredString(middle,hPage-45,'*** '+title+' ***')
-			c.setFont("Calibri", 7)
-			c.drawString(13,hPage-55,'RUC: ' + com.vat)
-			c.drawString(13,hPage-65,'Dirección : ' + (com.street or '')[:36])
-			c.drawString(13,hPage-75,(com.street or '')[36:])
-			c.drawString(13,hPage-85,'Dep : ' + (com.partner_id.state_id.name or '') +  '  ' + 'Prov : ' + (com.partner_id.province_id.name or '') + '  ' + 'Distrito : ' + (com.partner_id.district_id.name or ''))
-			c.drawString(13,hPage-95,u'Teléfono : ' + str(com.partner_id.phone or '') + ' / ' + str(com.partner_id.mobile or ''))
-			c.setFont("Calibri-Bold", 7)
+			c.setFont("Calibri", 9)
+			c.drawString(5,hPage-55,'RUC: ' + com.vat)
+			c.drawString(5,hPage-65,'Dirección : ' + (com.street or '')[:36])
+			c.drawString(5,hPage-75,(com.street or '')[36:])
+			c.drawString(5,hPage-85,'Dep : ' + (com.partner_id.state_id.name or '') +  '  ' + 'Prov : ' + (com.partner_id.province_id.name or '') + '  ' + 'Distrito : ' + (com.partner_id.district_id.name or ''))
+			c.drawString(5,hPage-95,u'Teléfono : ' + str(com.partner_id.phone or '') + ' / ' + str(com.partner_id.mobile or ''))
+			c.setFont("Calibri-Bold", 9)
 			c.drawCentredString(middle,hPage-125,'PEDIDO DE VENTA')
 
 			#Cliente
 			c.drawCentredString(middle,hPage-135,str(self.name or ''))
-			c.setFont("Calibri", 7)
-			c.drawString(13,hPage-145,'Fecha: '+str(self.date_order or ''))
-			c.drawString(13,hPage-155,'Condiciones de pago: ' + str(self.payment_term_id.name or ''))
-			c.drawString(13,hPage-165,'Cliente: '+str(self.partner_id.name or '')[:36])
-			c.drawString(13,hPage-175,'RUC: '+str(self.partner_id.vat or ''))
-			c.drawString(13,hPage-185,'Dirección: '+str(self.partner_id.street or '')[:36])
-			c.drawString(13,hPage-195,'Dep: ' + (self.partner_id.state_id.name or '') +  '  ' + 'Prov: ' + (self.partner_id.province_id.name or '') + '  ' + 'Distrito: ' + (self.partner_id.district_id.name or ''))
-			c.drawString(13,hPage-205,u'Teléfono: ' + str(self.partner_id.phone or '') + ' / ' + str(com.partner_id.mobile or ''))
-			c.drawString(13,hPage-215,'Agencia de envío: '+str(self.delivery_agency or '')[:36])
+			c.setFont("Calibri", 9)
+			c.drawString(5,hPage-145,'Fecha: '+str(self.date_order or ''))
+			c.drawString(5,hPage-155,'Condiciones de pago: ' + str(self.payment_term_id.name or ''))
+			c.drawString(5,hPage-165,'Cliente: '+str(self.partner_id.name or '')[:34])
+			c.drawString(5,hPage-175,'RUC: '+str(self.partner_id.vat or ''))
+			c.drawString(5,hPage-185,'Dirección: '+str(self.partner_id.street or '')[:34])
+			c.drawString(5,hPage-195,'Dep: ' + (self.partner_id.state_id.name or '') +  '  ' + 'Prov: ' + (self.partner_id.province_id.name or '') + '  ' + 'Distrito: ' + (self.partner_id.district_id.name or ''))
+			c.drawString(5,hPage-205,u'Teléfono: ' + str(self.partner_id.phone or '') + ' / ' + str(com.partner_id.mobile or ''))
+			c.drawString(5,hPage-215,'Agencia de envío: '+str(self.delivery_agency or '')[:34])
 
-			c.setFont("Calibri-Bold", 7)
+			c.setFont("Calibri-Bold", 9)
 			c.drawCentredString(middle,hPage-225,'______________________________________________________')
 			c.drawCentredString(middle,hPage-235,'Nombre')
 			c.drawCentredString(middle,hPage-240,'______________________________________________________')
@@ -551,9 +551,9 @@ class SaleOrder(models.Model):
 			Paragraph('Desc: '+str(descuentp_producto)+'%',S1),
 			Paragraph(subtotal_producto,S1)],]
 
-			pos_left = 13
+			pos_left = 5
 			wUtil = wPage-2*pos_left
-			col_widths = [float(i)/100*wUtil for i in (25,75)]
+			col_widths = [float(i)/100*wUtil for i in (25,80)]
 			col_widths2 = [float(i)/100*wUtil for i in (20,35,25,25)]
 			
 			t=Table(data,colWidths=col_widths)
@@ -572,10 +572,9 @@ class SaleOrder(models.Model):
 
 
 			pos-=h_table
-			if pos < bottom:
+			if pos < bottom-50:
 				c.showPage()
-				pos = hPage-90
-				pos-=h_table
+				pos = hPage-20
 				t.drawOn(c,pos_left,pos)
 				t2.drawOn(c,pos_left,pos-10)
 			else: 
@@ -584,7 +583,7 @@ class SaleOrder(models.Model):
 
 		pos-=3
 
-		col_widths3 = [float(i)/100*wUtil for i in (40,40,20)]
+		col_widths3 = [float(i)/100*wUtil for i in (40,40,25)]
 		data3 = [[Paragraph('',S1),Paragraph('Total sin IGV:',S1),Paragraph(str(self.amount_untaxed),S1)],]
 		t3=Table(data3,colWidths=col_widths3)
 		t3.setStyle(TableStyle([
@@ -613,10 +612,9 @@ class SaleOrder(models.Model):
 		t5.drawOn(c,pos_left,pos-40)
 
 		#total en letras
-		print(moneda[0])
-		c.setFont("Calibri", 7)
-		c.drawString(13,pos-50,'Total: '+str(self.numero_to_letras(self.amount_total or 0.0)))
-		c.drawString(13,pos-60,(str(moneda[0])))
+		c.setFont("Calibri", 9)
+		c.drawString(5,pos-50,'Total: '+str(self.numero_to_letras(self.amount_total or 0.0)))
+		c.drawString(5,pos-60,(str(moneda[0])))
 
 
 		col_widths4 = [float(i)/100*wUtil for i in (50,50)]
@@ -648,7 +646,7 @@ class SaleOrder(models.Model):
 		t8.wrapOn(c,120,500)
 		t8.drawOn(c,pos_left,pos-100)
 
-		c.setFont("Calibri", 7)
+		c.setFont("Calibri", 9)
 		c.drawCentredString(middle,pos-110,'______________________________________________________')
 		c.drawCentredString(middle,pos-120,'*** Gracias por su Compra ***')
 
