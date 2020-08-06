@@ -13,6 +13,47 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 	period_ini = fields.Date(u'Fecha inicial',default=lambda self: fields.Date.context_today(self))
 	period_end = fields.Date(u'Fecha Final',default=lambda self: fields.Date.context_today(self))
 
+	def _get_previus_layer(self, location_id,product_id,date_done):
+		# -> Obtener último movimento de product_id en location_id
+		# -> Ordenamiento por fecha, si es gasto vinculado y id
+		# -> Si hubieran 2 compras con gastos vinculados exactamente 
+		# -> en la misma hora, salen primero las compras y luego todos 
+		# -> los GV asociados a ellas.
+		# ****
+		
+		date_done = parse2str_dt(date_done)
+		start_date = '%s-01-01 00:00:00' % date_done[:4]
+
+		params = (start_date, date_done, product_id) + 4 * (location_id,)
+		self.flush()
+		sql = f"""
+		SELECT ARRAY_AGG(T.id)
+		FROM (
+			SELECT 
+			kvl.id
+			FROM 
+			kdx_valuation_layer kvl
+			JOIN stock_move sm ON sm.id = kvl.move_id
+			WHERE sm.state = 'done'
+			AND COALESCE(sm.scrapped, false) = false
+			AND kvl.date_done >= %s 
+			AND kvl.date_done <= %s 
+			AND kvl.product_id = %s 
+			AND (kvl.location_id = %s or kvl.location_dest_id = %s)
+			AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
+				(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
+				OR COALESCE(kvl.is_transfer, false) != true )
+			ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC 
+		)T;"""
+		
+		self._cr.execute(sql, params)
+		arr_values = self._cr.fetchone()[0]
+		index = arr_values.index(self.id) + 1
+		prev_layer_id = arr_values[index : index + 1] or False
+		return self.browse(prev_layer_id)
+	
+	
+	
 	def build_report_excel(self):
 		com = self.env.company
 		path = self.env['report.it'].get_reports_path()
@@ -108,6 +149,9 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 		pedido_venta = self.env['sale.order'].sudo()
 
 		for item in self.env['account.move.line'].browse(facturas_list):
+			
+			
+
 			if item.id in facturas_list and item.journal_id.name == 'Facturas de cliente':
 				worksheet.write(x,1, item.move_id.invoice_date or '', fdatetime)
 				worksheet.write(x,2, item.move_id.invoice_date_due or '', fdatetime)
@@ -155,24 +199,33 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,17, me  or '', decimal2)
 				worksheet.write(x,18, item.move_id.currency_rate  or '', normal)
 				pv_fac = pedido_venta.search([('name','=',item.move_id.invoice_origin)],limit=1)
+
+
 				cantidad_entregada_list = []
+				almacen_list=[]
+				fechas_list=[]
 				worksheet.write(x,19, 0.00, decimal2)
 				for entrega in pv_fac.picking_ids:
 					if entrega.state == 'done' and entrega.origin == item.move_id.invoice_origin:
+						almacen_list.append(entrega.location_id.id)
+						fechas_list.append(entrega.date_done)
 						for linea_entrega in entrega.move_line_ids_without_package:
 							if linea_entrega.product_id.id == item.product_id.id:
 								cantidad_entregada_list.append(linea_entrega.qty_done)
 								worksheet.write(x,19, sum(cantidad_entregada_list) or 0.00, decimal2)
-				
+				print(fechas_list[0])
+
 				worksheet.write(x,20, 0.00, decimal2)
 				worksheet.write(x,21, 0.00, decimal2)
 				if item.product_id.id != False and item.date != False:
 					query = """select product_id,avg_cost,to_char(date_done,'YYYY-MM-DD')
 					from kdx_valuation_layer 
 					where product_id= %s
-					and to_char(date_done,'YYYY-MM-DD') = '%s'
+					and date_done = '%s'
+					and location_id = %s
 					ORDER BY date_done DESC, is_landed_cost DESC, id DESC 
-					"""%(item.product_id.id,item.date)
+					"""%(item.product_id.id,fechas_list[0],almacen_list[0])
+					print(item.product_id.id,fechas_list[0],almacen_list[0])
 					self._cr.execute(query)
 					results = self._cr.dictfetchall()
 					for item_for in results:
