@@ -504,7 +504,7 @@ class SaleOrder(models.Model):
 			c.drawString(5,hPage-185,'Dirección: '+str(self.partner_id.street or '')[:34])
 			c.drawString(5,hPage-195,'Dep: ' + (self.partner_id.state_id.name or '') +  '  ' + 'Prov: ' + (self.partner_id.province_id.name or '') + '  ' + 'Distrito: ' + (self.partner_id.district_id.name or ''))
 			c.drawString(5,hPage-205,u'Teléfono: ' + str(self.partner_id.phone or '') + ' / ' + str(com.partner_id.mobile or ''))
-			c.drawString(5,hPage-215,'Agencia de envío: '+str(self.delivery_agency or '')[:34])
+			c.drawString(5,hPage-215,('Agencia de envío: '+str(self.delivery_agency or ''))[:47])
 
 			c.setFont("Calibri-Bold", 9)
 			c.drawCentredString(middle,hPage-225,'______________________________________________________')
