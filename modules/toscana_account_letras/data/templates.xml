@@ -79,7 +79,7 @@
                     ${(o.partner_id.street or '')[:47].ljust(29)}
                     ${(o.partner_id.street or '')[47:].ljust(29)}
                     ${(o.partner_id.vat or '').ljust(30)} ${(o.partner_id.state_id.name or '').ljust(10)}
-                    ${''.ljust(29)} ${(o.partner_id.phone or '').rjust(3)}
+                    ${''.ljust(29)} ${((o.partner_id.mobile or o.partner_id.phone) or '').rjust(3)}
 
                     ${''.ljust(17)}${(o.letra_payment_id.aval_permanente.name or '').ljust(10)}
                     ${''.ljust(10)} ${(o.letra_payment_id.aval_permanente.street or '')[:43].ljust(10)}
@@ -113,7 +113,7 @@
                     ${(object.partner_id.street or '')[:47].ljust(29)}
                     ${(object.partner_id.street or '')[47:].ljust(29)}
                     ${(object.partner_id.vat or '').ljust(30)} ${(object.partner_id.state_id.name or '').ljust(10)}
-                    ${''.ljust(29)} ${(object.partner_id.phone or '').rjust(3)}
+                    ${''.ljust(29)} ${((object.partner_id.mobile or object.partner_id.phone) or '').rjust(3)}
                     ${''.ljust(17)}${(object.letra_payment_id.aval_permanente.name or '').ljust(10)}
                     ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[:43].ljust(10)}
                     ${''.ljust(10)} ${(object.letra_payment_id.aval_permanente.street or '')[43:].ljust(10)}
