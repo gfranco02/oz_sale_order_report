@@ -2,6 +2,7 @@
 <odoo>
     <data>
         <record model="ir.ui.view" id="view_order_form">
+<<<<<<< HEAD
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"></field>
@@ -20,6 +21,7 @@
                 </xpath>
 
             </field>
+
         </record>
         
         <record model="ir.ui.view" id="view_order_margin_form">
