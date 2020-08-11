@@ -5,19 +5,18 @@
     'summary': 'Modulo que agrega grupos de seguridad a campos base del Odoo',
     'description':"""
 		-Función: Agrega un grupo de seguridad a:
-                    1)Botón Confirmar dentro de Cotización
+            1)Botónes Confirmar dentro de Cotización
+            2)Menú Kardex Valorado.
+            3)Menú Extracto Bancario.
 		-Desarrollador: Rodrigo Dueñas.
 		-Funcional: Angel Linares.
 	""",
     'author': 'ITGRUPO-TOSCANA',
-    'depends': ['sale_management', 'purchase'],
+    'depends': ['sale_management', 'purchase','account_base_it','kardex','sale_margin'],
     'data': [
         'security/groups.xml',
-        # 'security/ir.model.access.csv',
         'views/sale_order_view.xml',
         'views/product.xml',
+        'views/account_bank_statement_view.xml',
     ],
-    # 'images': [
-    #     'static/description/icon.png',
-    # ],
 }
