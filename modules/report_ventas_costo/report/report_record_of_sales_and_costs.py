@@ -181,8 +181,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 					self._cr.execute(query)
 					results = self._cr.dictfetchall()
 					for item_for in results:
-						ref = item.move_id.ref.split('-')
-						if item_for['serie'] == ref[0] and item_for['inv_number'] == ref[1]:
+						if (item_for['serie'] or '')+'-'+(item_for['inv_number'] or '') == item.move_id.ref:
 							worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
 							y = x+1
 							worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
