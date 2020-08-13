@@ -180,13 +180,13 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 					query = self.env['kdx.report.wizard']._prepare_sql_kdx_query('valued', self.period_ini, self.period_end, str({almacen_list[0]}), item.product_id.ids)
 					self._cr.execute(query)
 					results = self._cr.dictfetchall()
-					
 					for item_for in results:
-						worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
-						y = x+1
-						worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
+						ref = item.move_id.ref.split('-')
+						if item_for['serie'] == ref[0] and item_for['inv_number'] == ref[1]:
+							worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
+							y = x+1
+							worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
 				x+=1
-
 
 		size_widths = (2, 13, 13, 5, 7, 11, 11, 13, 20,20, 5, 20, 8, 8,) + 3 * (8,) + (8, 8, 8)
 
