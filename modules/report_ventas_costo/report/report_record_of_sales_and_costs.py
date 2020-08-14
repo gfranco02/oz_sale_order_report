@@ -176,7 +176,7 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 
 				worksheet.write(x,20, 0.00, decimal2)
 				worksheet.write(x,21, 0.00, decimal2)
-				if item.product_id.id != False and item.date != False and almacen_list != False:
+				if item.product_id.id != False and item.date != False and almacen_list != False and item.product_id.ids !=False:
 					query = self.env['kdx.report.wizard']._prepare_sql_kdx_query('valued', self.period_ini, self.period_end, str({almacen_list[0]}), item.product_id.ids)
 					self._cr.execute(query)
 					results = self._cr.dictfetchall()
