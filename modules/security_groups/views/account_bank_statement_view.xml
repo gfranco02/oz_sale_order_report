@@ -24,5 +24,11 @@
             <field name="groups_id" eval="[(6,0,[ref('kardex_valorado_security_it_tos')])]"/>
         </record>
 
+        <menuitem id="stock.menu_warehouse_report" name="Informes_1" sequence="99" parent="stock.menu_stock_root"/>
+
+        <record model="ir.ui.menu" id="stock.menu_warehouse_report">
+            <field name="groups_id" eval="[(6,0,[ref('inform_inventario_security_it_tos')])]"/>
+        </record>
+
     </data>
 </odoo>

@@ -28,5 +28,9 @@
             <field name="name">Margen</field>
         </record>
 
+        <record id="inform_inventario_security_it_tos" model="res.groups">
+            <field name="name">Informes - Inventarios</field>
+        </record>
+
     </data>
 </odoo>
