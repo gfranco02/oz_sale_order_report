@@ -177,14 +177,15 @@ class ReportRecordOfSalesAndCosts(models.TransientModel):
 				worksheet.write(x,20, 0.00, decimal2)
 				worksheet.write(x,21, 0.00, decimal2)
 				if item.product_id.id != False and item.date != False and item.product_id.id != 2697:
-					query = self.env['kdx.report.wizard']._prepare_sql_kdx_query('valued', self.period_ini, self.period_end, str({almacen_list[0]}), item.product_id.ids)
-					self._cr.execute(query)
-					results = self._cr.dictfetchall()
-					for item_for in results:
-						if (item_for['serie'] or '')+'-'+(item_for['inv_number'] or '') == item.move_id.ref:
-							worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
-							y = x+1
-							worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
+					if len(almacen_list) > 0:
+						query = self.env['kdx.report.wizard']._prepare_sql_kdx_query('valued', self.period_ini, self.period_end, str({almacen_list[0]}), item.product_id.ids)
+						self._cr.execute(query)
+						results = self._cr.dictfetchall()
+						for item_for in results:
+							if (item_for['serie'] or '')+'-'+(item_for['inv_number'] or '') == item.move_id.ref:
+								worksheet.write(x,20, (item_for['amount_out']/(item_for['quantity_out'] or 1))or 0.00, decimal2)
+								y = x+1
+								worksheet.write_formula('V%s'%y, '=T%s*U%s'%(y,y), decimal2)
 				x+=1
 
 		size_widths = (2, 13, 13, 5, 7, 11, 11, 13, 20,20, 5, 20, 8, 8,) + 3 * (8,) + (8, 8, 8)
