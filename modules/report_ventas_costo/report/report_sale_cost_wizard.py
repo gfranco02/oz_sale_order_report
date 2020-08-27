@@ -110,9 +110,18 @@ class ReportSaleCostWizard(models.TransientModel):
 		pt.name AS product,
 		ROUND(aml.quantity * uom_prod.factor / uom_aml.factor, 4) AS aml_qty,
 		uom_prod.name AS uom,
-		aml.price_subtotal * aml.tc AS total_excluded,
-		aml.price_total * aml.tc AS total_included,
-		(aml.price_total - aml.price_subtotal) * aml.tc AS taxes,
+		CASE 
+			WHEN am.type = 'out_refund' THEN -(aml.price_subtotal * aml.tc) 
+			ELSE aml.price_subtotal * aml.tc END 
+			AS total_excluded,
+		CASE 
+			WHEN am.type = 'out_refund' THEN -(aml.price_total * aml.tc) 
+			ELSE aml.price_total * aml.tc END 
+			AS total_included,
+		CASE 
+			WHEN am.type = 'out_refund' THEN -((aml.price_total - aml.price_subtotal) * aml.tc) 
+			ELSE (aml.price_total - aml.price_subtotal) * aml.tc END
+			AS taxes,
 		CASE WHEN rc.name != 'PEN' THEN aml.price_subtotal ELSE 0.0 END AS amount_fc,
 		rc.name AS currency,
 		aml.tc AS tc,
