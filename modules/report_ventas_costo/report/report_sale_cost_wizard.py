@@ -122,7 +122,12 @@ class ReportSaleCostWizard(models.TransientModel):
 			WHEN am.type = 'out_refund' THEN -((aml.price_total - aml.price_subtotal) * aml.tc) 
 			ELSE (aml.price_total - aml.price_subtotal) * aml.tc END
 			AS taxes,
-		CASE WHEN rc.name != 'PEN' THEN aml.price_subtotal ELSE 0.0 END AS amount_fc,
+		CASE WHEN rc.name != 'PEN' 
+			THEN 
+				CASE WHEN am.type = 'out_refund' THEN -aml.price_subtotal 
+				ELSE aml.price_subtotal
+				END 
+			ELSE 0.0 END AS amount_fc,
 		rc.name AS currency,
 		aml.tc AS tc,
 		kvl.unit_cost AS cost_product,
