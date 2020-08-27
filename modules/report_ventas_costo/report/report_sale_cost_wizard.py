@@ -126,10 +126,10 @@ class ReportSaleCostWizard(models.TransientModel):
 		JOIN account_move am ON (am.id = aml.move_id AND aml.exclude_from_invoice_tab = false)
 		JOIN res_currency rc ON rc.id = am.currency_id
 		JOIN account_journal aj ON aj.id = am.journal_id
-		JOIN product_product pp ON pp.id = aml.product_id
-		JOIN product_template pt ON pt.id = pp.product_tmpl_id
-		JOIN uom_uom uom_aml ON uom_aml.id = aml.product_uom_id
-		JOIN uom_uom uom_prod ON uom_prod.id = pt.uom_id
+		LEFT JOIN product_product pp ON pp.id = aml.product_id
+		LEFT JOIN product_template pt ON pt.id = pp.product_tmpl_id
+		LEFT JOIN uom_uom uom_aml ON uom_aml.id = aml.product_uom_id
+		LEFT JOIN uom_uom uom_prod ON uom_prod.id = pt.uom_id
 		LEFT JOIN res_partner rp ON rp.id = am.partner_id
 		LEFT JOIN l10n_latam_identification_type it ON it.id = rp.l10n_latam_identification_type_id
 		LEFT JOIN einvoice_catalog_01 eic1 ON eic1.id = am.type_document_id
@@ -152,7 +152,8 @@ class ReportSaleCostWizard(models.TransientModel):
 		AND aj.type = 'sale'
 		AND aj.name != 'Facturas para letras INV INI' -- FIXME
 		AND am.invoice_date BETWEEN %s AND %s
-		GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, sm.product_qty, sm2.product_qty;"""
+		GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, sm.product_qty, sm2.product_qty, am.ref 
+		ORDER BY am.ref; """
 
 		self._cr.execute(sql, (self.start_date, self.end_date))
 
