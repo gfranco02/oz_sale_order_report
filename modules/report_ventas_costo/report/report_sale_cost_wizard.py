@@ -37,7 +37,9 @@ class ReportSaleCostWizard(models.TransientModel):
 		boldbord2.set_text_wrap()
 		boldbord2.set_font_size(9)
 		decimal2 = workbook.add_format({'num_format':'0.00', 'font_size': 8})
-		decimal2.set_border(style=1)	
+		decimal2.set_border(style=1)
+		decimal2bold = workbook.add_format({'num_format':'0.00', 'font_size': 9, 'bold': True})
+		decimal2bold.set_border(style=1)
 		decimal4 = workbook.add_format({'num_format':'0.0000', 'font_size': 8})
 		decimal4.set_border(style=1)
 		decimal6 = workbook.add_format({'num_format':'0.000000', 'font_size': 8})
@@ -91,6 +93,8 @@ class ReportSaleCostWizard(models.TransientModel):
 		worksheet.write(x, 22, "COSTO PROMEDIO TOTAL", boldbord)
 		x+=1
 
+		total_untaxed = total_taxes = total_included = total_fc = 0.0
+
 		sql = """
 		SELECT 
 		am.invoice_date,
@@ -106,10 +110,10 @@ class ReportSaleCostWizard(models.TransientModel):
 		pt.name AS product,
 		ROUND(aml.quantity * uom_prod.factor / uom_aml.factor, 4) AS aml_qty,
 		uom_prod.name AS uom,
-		aml.price_subtotal AS total_excluded,
-		aml.price_total AS total_included,
-		aml.price_total - aml.price_subtotal AS taxes,
-		CASE WHEN rc.name != 'PEN' THEN aml.price_subtotal * aml.tc ELSE 0.0 END AS amount_fc,
+		aml.price_subtotal * aml.tc AS total_excluded,
+		aml.price_total * aml.tc AS total_included,
+		(aml.price_total - aml.price_subtotal) * aml.tc AS taxes,
+		CASE WHEN rc.name != 'PEN' THEN aml.price_subtotal ELSE 0.0 END AS amount_fc,
 		rc.name AS currency,
 		aml.tc AS tc,
 		kvl.unit_cost AS cost_product,
@@ -151,7 +155,7 @@ class ReportSaleCostWizard(models.TransientModel):
 		GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, sm.product_qty, sm2.product_qty;"""
 
 		self._cr.execute(sql, (self.start_date, self.end_date))
-		
+
 		for line in self._cr.dictfetchall():
 			worksheet.write(x, 1, line['invoice_date'] or '-', fdate)
 			worksheet.write(x, 2, line['invoice_date_due'] or '-', fdate)
@@ -166,11 +170,22 @@ class ReportSaleCostWizard(models.TransientModel):
 			worksheet.write(x, 11, line['product'] or '-', normal)
 			worksheet.write(x, 12, line['aml_qty'] or '-', decimal2)
 			worksheet.write(x, 13, line['uom'] or '-', normal)
-			worksheet.write(x, 14, line['total_excluded'] or '-', decimal2)
-			worksheet.write(x, 15, line['taxes'] or '-', decimal2)
-			worksheet.write(x, 16, line['total_included'] or '-', decimal2)
+
+			excluded = line['total_excluded'] or 0.0 
+			taxes = line['taxes'] or 0.0
+			included = line['total_included'] or 0.0
+			amount_fc = line['amount_fc'] or 0.0
+
+			total_untaxed += excluded
+			total_taxes += taxes
+			total_included += included
+			total_fc += amount_fc
+
+			worksheet.write(x, 14, excluded, decimal2)
+			worksheet.write(x, 15, taxes, decimal2)
+			worksheet.write(x, 16, included, decimal2)
 			worksheet.write(x, 17, line['currency'] or '-', normal)
-			worksheet.write(x, 18, line['amount_fc'] or '-', decimal2)
+			worksheet.write(x, 18, amount_fc, decimal2)
 			worksheet.write(x, 19, line['tc'] or '-', decimal4)
 			
 			delivered_qty = line['delivered_qty'] or 0.0
@@ -180,6 +195,11 @@ class ReportSaleCostWizard(models.TransientModel):
 			worksheet.write(x, 21, cost_product, decimal4)
 			worksheet.write(x, 22, delivered_qty * cost_product, decimal4)
 			x-=-1 # lol
+
+		worksheet.write(x, 14, total_untaxed, decimal2bold)
+		worksheet.write(x, 15, total_taxes, decimal2bold)
+		worksheet.write(x, 16, total_included, decimal2bold)
+		worksheet.write(x, 18, total_fc, decimal2bold)
 
 		size_widths = (2, 9, 9, 4, 5, 11, 7, 10, 22, 15, 9, 25, 10, 10,) + 3 * (10,) + (5, 10, 6) + 3 * (10,)
 		worksheet = resize_cells_widths(worksheet, size_widths)
