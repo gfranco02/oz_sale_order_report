@@ -24,7 +24,7 @@
         </record>
 
         <record id="confirm_purchase_order_it_tos" model="res.groups">
-            <field name="name">Extractos Bancarios</field>
+            <field name="name">Confirmar pedidos de compra</field>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
