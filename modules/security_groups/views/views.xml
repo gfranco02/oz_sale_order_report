@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Pedidos de venta -->
+        <record model="ir.ui.view" id="view_order_form">
+
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"></field>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                    <attribute name="groups">security_groups.group_confirm_quotation</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="groups">security_groups.group_confirm_quotation</attribute>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="attributes">
+                    <attribute name="groups">security_groups.group_discount_quotation</attribute>
+                </xpath>
+
+            </field>
+
+        </record>
+
+        <!-- Pedidos de compra -->
+        <record model="ir.ui.view" id="purchase_order_form">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"></field>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@id='bid_confirm']" position="attributes">
+                    <attribute name="groups">security_groups.confirm_purchase_order_it_tos</attribute>
+                </xpath>
+
+                <xpath expr="//button[@id='draft_confirm']" position="attributes">
+                    <attribute name="groups">security_groups.confirm_purchase_order_it_tos</attribute>
+                </xpath>
+                
+            </field>
+        </record>
+
+
+            <!-- Restringir extractos bancarios -->
+        <menuitem 
+            action="account.action_bank_statement_tree" 
+            id="account_base_it.menu_bank_statement" 
+            name="Extractos Bancarios" 
+            parent="account_base_it.menu_treasury" 
+            sequence="1" 
+            groups="security_groups.bank_statement_security_it_tos"/>
+
+        <record model="ir.ui.menu" id="account_base_it.menu_bank_statement">
+            <field name="groups_id" eval="[(6,0,[ref('bank_statement_security_it_tos')])]"/>
+        </record>
+
+        <!-- Reportes de stock -->
+        <menuitem id="stock.menu_warehouse_report" name="Informes_1" sequence="99" parent="stock.menu_stock_root"/>
+
+        <record model="ir.ui.menu" id="stock.menu_warehouse_report">
+            <field name="groups_id" eval="[(6,0,[ref('inform_inventario_security_it_tos')])]"/>
+        </record>
+
+        <!-- Impuestos en productos -->
+        <record id="view_product_bill_inherit" model="ir.ui.view">
+            <field name="name">product.template.supplier.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <group name="bill" position="attributes">
+                    <attribute name="groups">security_groups.group_product_purchase_taxes</attribute>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

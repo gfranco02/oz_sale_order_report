@@ -6,17 +6,15 @@
     'description':"""
 		-Función: Agrega un grupo de seguridad a:
             1)Botónes Confirmar dentro de Cotización
-            2)Menú Kardex Valorado.
-            3)Menú Extracto Bancario.
+            2)Menú Extracto Bancario.
+            3)Confirmar pedidos de compra.
 		-Desarrollador: Rodrigo Dueñas.
 		-Funcional: Angel Linares.
 	""",
     'author': 'ITGRUPO-TOSCANA',
-    'depends': ['sale_management', 'purchase','account_base_it','kardex','sale_margin','stock'],
+    'depends': ['sale_management', 'purchase', 'account_base_it'],
     'data': [
         'security/groups.xml',
-        'views/sale_order_view.xml',
-        'views/product.xml',
-        'views/account_bank_statement_view.xml',
+        'views/views.xml',
     ],
 }
