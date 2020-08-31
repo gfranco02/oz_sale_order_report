@@ -26,11 +26,12 @@
 
         </record>
 
-        <!-- Pedidos de compra -->
-        <record id="purchase.menu_report_purchase" model="ir.ui.menu">
-            <field name="action" ref="purchase_enterprise.purchase_report_action_dashboard" 
-                groups="security_groups.reports_purchase_order_it_tos"/>
-        </record>
+    <!-- Pedidos de compra -->
+
+    <!-- Override menu -->
+    <menuitem id="purchase_report" name="Reporting" parent="purchase.menu_purchase_root" sequence="99" 
+        groups="security_groups.reports_purchase_order_it_tos"/>
+
 <!--         <record model="ir.ui.view" id="purchase_order_form">
             <field name="name">purchase.order.form</field>
             <field name="model">purchase.order</field>

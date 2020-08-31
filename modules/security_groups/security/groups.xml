@@ -14,7 +14,7 @@
 
         <record id="group_product_purchase_taxes" model="res.groups">
             <field name="name">Impuestos de compras en productos</field>
-            <field name="category_id" ref="base.module_category_operations_purchase"/>   
+            <!-- <field name="category_id" ref="base.module_category_operations_purchase"/>    -->
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
