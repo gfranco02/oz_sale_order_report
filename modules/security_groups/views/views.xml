@@ -41,6 +41,10 @@
                     <attribute name="groups">security_groups.confirm_purchase_order_it_tos</attribute>
                 </xpath>
                 
+                <xpath expr="//button[@name='button_approve']" position="attributes">
+                    <attribute name="groups">security_groups.confirm_purchase_order_it_tos</attribute>
+                </xpath>
+                
             </field>
         </record>
 
