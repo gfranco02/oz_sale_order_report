@@ -23,8 +23,8 @@
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
-        <record id="confirm_purchase_order_it_tos" model="res.groups">
-            <field name="name">Confirmar pedidos de compra</field>
+        <record id="reports_purchase_order_it_tos" model="res.groups">
+            <field name="name">Reportes de Compras</field>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
