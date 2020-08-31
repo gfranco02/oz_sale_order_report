@@ -12,7 +12,7 @@
 		-Funcional: Angel Linares.
 	""",
     'author': 'ITGRUPO-TOSCANA',
-    'depends': ['sale_management', 'purchase', 'account_base_it'],
+    'depends': ['sale_management', 'purchase_enterprise', 'account_base_it'],
     'data': [
         'security/groups.xml',
         'views/views.xml',
