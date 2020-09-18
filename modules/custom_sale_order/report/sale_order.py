@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
 			c.drawImage(header_logo,20,pos-10,width=330,height=70,mask='auto')
 
 			data= [[name_state],
-			['Numero: %s'%(self.name or ' ')],
+			['Número: %s'%(self.name or ' ')],
 			['Fecha: %s'%(str(self.date_order)[0:10])]]
 			Table_1=Table(data)
 			Table_1.setStyle(TableStyle([
@@ -110,10 +110,10 @@ class SaleOrder(models.Model):
 			data=[
 				[Paragraph(u"Cliente: %s"%(self.partner_id.name or ' '),p1_1),'','',''],
 				[Paragraph(u"Contacto: %s"%(self.contact_order_id.name or ' '),p1_1),'','',''],
-				[Paragraph(u"DNI O RUC:",p1_1),Paragraph(u"%s"%(self.partner_id.vat or ' '),p1_1),Paragraph(u"Codigo:",p1_1),Paragraph(u"%s"%(self.partner_id.ref or ' '),p1_1)],
+				[Paragraph(u"DNI O RUC:",p1_1),Paragraph(u"%s"%(self.partner_id.vat or ' '),p1_1),Paragraph(u"Código:",p1_1),Paragraph(u"%s"%(self.partner_id.ref or ' '),p1_1)],
 				[Paragraph(u"Dirección: %s" % (self.partner_id.street or ' '),p1_1),'','',''],
 				[Paragraph(u"Ciudad: %s-%s-%s"%(self.partner_id.state_id.name or ' ',self.partner_id.province_id.name or ' ',self.partner_id.district_id.name or ' '),p1_1),'','',''],
-				[Paragraph(u"Telefono: %s"%(self.partner_id.phone or ' '),p1_1),'','',''],
+				[Paragraph(u"Teléfono: %s"%(self.partner_id.phone or ' '),p1_1),'','',''],
 			]
 			hTable=Table(data, colWidths=4*(85,), rowHeights=6*(15,))
 			hTable.setStyle(TableStyle([
@@ -266,12 +266,12 @@ class SaleOrder(models.Model):
 
 
 		def header_table3(c, pos):
-			data=[[Paragraph(u"Código.",p1),Paragraph(u"Producto",p1),Paragraph(u"Cantidad",p1),Paragraph(u"U.M.",p1),Paragraph(u"Precio Unit.",p1),Paragraph(u"Dscto",p1),Paragraph(u"Subtotal",p1),Paragraph(u"IVA %",p1)],]
+			data=[[Paragraph(u"Código.",p1), Paragraph(u"Producto",p1), Paragraph(u"Cantidad",p1), Paragraph(u"U.M.",p1), Paragraph(u"Precio Unit.",p1), Paragraph(u"Dscto",p1), Paragraph(u"Subtotal",p1), Paragraph(u"IVA %",p1)],]
 			Table_lines=Table(data,colWidths=col_widths0,rowHeights=(20))
 			Table_lines.setStyle(TableStyle([
 				('VALIGN',(0,0),(-1,-1),'MIDDLE'),
-				('SPAN',(2,-1),(1,-1)),
-				('BOX',(0,0),(-1,-1),1,colors.black)
+				#('SPAN',(2,-1),(1,-1)),
+				('BOX',(0,0),(-1,-1),1, colors.black)
 				]))
 			Table_lines.wrapOn(c,120,500)
 			Table_lines.drawOn(c,pos_left,pos-160)
@@ -314,7 +314,7 @@ class SaleOrder(models.Model):
 			t=Table(data, colWidths=col_widths0)
 			t.setStyle(TableStyle([
 			('VALIGN',(0,0),(-1,-1),'TOP'),
-			('SPAN',(2,-1),(1,-1)),
+			#('SPAN',(2,-1),(1,-1)),
 			]))
 			w_table,h_table=t.wrap(0,0)
 			t.wrapOn(c,120,500)
@@ -397,7 +397,8 @@ class SaleOrder(models.Model):
 			c.drawImage(cuentas_ban,20,(pos-170)-300,width=225,height=100,mask='auto')
 
 			c.setFont("Calibri-Bold", 10)
-			c.drawString(20,(pos-170)-315, "LA COTIZACION ES VALIDA DESDE SU EMISION HASTA EL " + str(self.validity_date))
+			if self.validity_date:
+				c.drawString(20,(pos-170)-315, "LA COTIZACIÓN ES VÁLIDA DESDE SU EMISIÓN HASTA EL " + str(self.validity_date))
 
 		header_table4(c,pos)
 
