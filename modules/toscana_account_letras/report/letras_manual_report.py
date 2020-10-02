@@ -31,14 +31,14 @@ class AccountLetrasPaymentManual(models.Model):
 		path += file_name
 		register_fonts(['Calibri', 'Calibri-Bold'])
 		wPage, hPage = A4
-		pos_left = 20
+		pos_left = 10
 		c = canvas.Canvas(path , pagesize= (wPage, hPage))
 		wUtil = wPage - 2 * pos_left # Util width : Real Width - left margins
 		middle = wPage / 2 # Center page
 		pos = hPage - 150
 		separator = 12
 		bottom = 55
-		col_widths = [float(i)/100*wUtil for i in (13,14,7,9,10,19,10,10,10)]
+		col_widths = [float(i)/100*wUtil for i in (13,16,9,12,12,13,12,13)]
 		
 
 		p1 = ParagraphStyle('p1', alignment=TA_CENTER, fontSize=8, fontName="Calibri-Bold")
@@ -50,8 +50,9 @@ class AccountLetrasPaymentManual(models.Model):
 		p7 = ParagraphStyle('p7', alignment=TA_LEFT, fontSize=11, fontName="Calibri")
 		p8 = ParagraphStyle('p8', alignment=TA_CENTER, fontSize=12, fontName="Calibri-Bold")
 		p9 = ParagraphStyle('p9', alignment=TA_CENTER, fontSize=10, fontName="Calibri-Bold")
-		p10 = ParagraphStyle('p3', alignment=TA_RIGHT, fontSize=10, fontName="Calibri")
-		p11 = ParagraphStyle('p6', alignment=TA_CENTER, fontSize=11, fontName="Calibri-Bold")
+		p10 = ParagraphStyle('p10', alignment=TA_RIGHT, fontSize=10, fontName="Calibri")
+		p11 = ParagraphStyle('p11', alignment=TA_CENTER, fontSize=11, fontName="Calibri-Bold")
+		p12 = ParagraphStyle('p12', alignment=TA_CENTER, fontSize=10, fontName="Calibri")
 		
 		style = getSampleStyleSheet()["Normal"]
 		gray = colors.Color(red=(200.0/255),green=(200.0/255),blue=(200.0/255))
@@ -80,8 +81,8 @@ class AccountLetrasPaymentManual(models.Model):
 
 		def header_table(c, pos):
 			data=[
-				[Paragraph("ESTADO DE CUENTA", p8), '', '', '', '', ''],
-				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("CU BANCO", p9),Paragraph("BANCO", p9), Paragraph("CLIENTE", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
+				[Paragraph("ESTADO DE CUENTA", p8), '', '', '', '', '', '', ''],
+				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("CODIGO UNICO", p9),Paragraph("BANCO", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
 			]
 			hTable=Table(data, colWidths=col_widths, rowHeights=(32))
 			hTable.setStyle(TableStyle([
@@ -142,7 +143,9 @@ class AccountLetrasPaymentManual(models.Model):
 			banco = line.bank_id.name
 
 			data = [
-				[Paragraph(fecha_ven or '', p2),Paragraph(invoices or '', p2),Paragraph(letter_name or '', p2), Paragraph(cu_banco or '', p2),Paragraph(banco or '', p2), Paragraph(partner.name or '', p2), Paragraph(amount_letter or '', p4),Paragraph(withdrawal_cost or '', p4), Paragraph(amount_total or '', p4)],
+				[Paragraph(fecha_ven or '', p12), Paragraph(invoices or '', p2), Paragraph(letter_name or '', p12), 
+					Paragraph(cu_banco or '', p12),Paragraph(banco or '', p2), Paragraph(amount_letter or '', p4), 
+					Paragraph(withdrawal_cost or '', p4), Paragraph(amount_total or '', p4)],
 			]
 			t=Table(data, colWidths=col_widths)
 
