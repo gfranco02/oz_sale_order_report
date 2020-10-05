@@ -82,7 +82,7 @@ class AccountLetrasPaymentManual(models.Model):
 		def header_table(c, pos):
 			data=[
 				[Paragraph("ESTADO DE CUENTA", p8), '', '', '', '', '', '', ''],
-				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("CODIGO UNICO", p9),Paragraph("BANCO", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
+				[Paragraph("FECHA VENCIMIENTO", p9),Paragraph("FACTURA", p9), Paragraph("NRO LETRA", p9),Paragraph("NUMERO UNICO", p9),Paragraph("BANCO", p9), Paragraph("MONTO LETRA", p9), Paragraph("COSTO RETIRO LETRA", p9), Paragraph("MONTO TOTAL", p9)],
 			]
 			hTable=Table(data, colWidths=col_widths, rowHeights=(32))
 			hTable.setStyle(TableStyle([
