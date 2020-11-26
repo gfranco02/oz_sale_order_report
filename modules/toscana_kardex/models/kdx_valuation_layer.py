@@ -11,6 +11,6 @@ class KardexValuationLayer(models.Model):
 		# TODO debería entrar siempre a una ubicación de stock
 		if self.location_dest_id.usage != 'internal':
 			raise UserError('La ubicación destino en las operaciones de tipo "19" debe ser de tipo interno.')
-		previus_layer = previus_layer or self._get_previus_layer(self.location_dest_id.id)
+		previus_layer = previus_layer or self._get_previus_layer(self.location_dest_id)
 		unit_cost = self.move_id.price_unit
 		return previus_layer, self.product_qty, unit_cost
