@@ -5,6 +5,20 @@ import base64
 import re 
 
 
+class AccountMoveLine(models.Model):
+	_inherit = 'account.move.line'
+
+	# Por motivos de prisa, colocaremos ésta restriccion aquí, TODO trasladar a un módulo más adecuado
+
+	def _get_bo_prepost_extended_values(self):
+		# Si es una factura de cliente, debe tener CC analítica
+		vals = super(AccountMoveLine, self)._get_bo_prepost_extended_values()
+		if self.move_id.type == 'out_invoice' and not self.exclude_from_invoice_tab and\
+			not vals.get('analytic_account_id', self.analytic_account_id):
+			raise UserError(f'Debe asignar una cuenta analítica a la línea: {self.name}.')
+		return vals
+
+
 class AccountLetrasPayment(models.Model):
 	_inherit = 'account.letras.payment'
 
