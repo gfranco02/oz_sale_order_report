@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError,ValidationError
+from odoo.exceptions import UserError, ValidationError
 import base64
 import re 
 
@@ -14,6 +14,7 @@ class AccountMoveLine(models.Model):
 		# Si es una factura de cliente, debe tener CC analítica
 		vals = super(AccountMoveLine, self)._get_bo_prepost_extended_values()
 		if self.move_id.type == 'out_invoice' and not self.exclude_from_invoice_tab and\
+			not self.move_id.currency_id.is_zero(self.price_unit) and\
 			not vals.get('analytic_account_id', self.analytic_account_id):
 			raise UserError(f'Debe asignar una cuenta analítica a la línea: {self.name}.')
 		return vals
