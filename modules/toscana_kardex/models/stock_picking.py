@@ -35,10 +35,10 @@ class StockPicking(models.Model):
 class StockMove(models.Model):
 	_inherit = 'stock.move'
 
-	def _action_done(self, cancel_backorder=False):
-		todo_moves = super(StockMove, self)._action_done(cancel_backorder)
-		for m in todo_moves:
+	def prev_valuation_check_update(self):
+		res = super(StockMove, self).prev_valuation_check_update()
+		for m in self:
 			if m.picking_id.l10n_pe_catalog_12_id.code == '19' and ((m.price_unit or 0.0) <= 0.0):
-				raise UserError(f'Debe establecer el costo manaulmente para  el movimiento '
+				raise UserError(f'Debe establecer el costo manualmente para  el movimiento '
 								f'del producto {m.product_id.name} que es de tipo "Ingreso de producción".')
-		return todo_moves
+		return res

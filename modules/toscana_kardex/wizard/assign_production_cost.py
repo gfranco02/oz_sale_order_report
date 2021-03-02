@@ -56,30 +56,34 @@ class AssignProductionCostWizard(models.TransientModel):
 
 
 	def _get_avg_cost(self):
+		# TODO FIXME ver qué pasará en caso usen lotes y series
 		if not self.product_ids:
 			raise UserError('Debe asignar algún producto(s) base para obtener un costo promedio')
 		
-		total_cost = 0.0
+		total_cost = 0.0 #sum(p for p in self.product_ids)
 		for p in self.product_ids:
-			params = (p.id,) + 4 * (self.move_id.location_id.id,)
-			sql = f"""
-				SELECT 
-				kvl.avg_cost
-				FROM 
-				kdx_valuation_layer kvl
-				JOIN stock_move sm ON sm.id = kvl.move_id
-				WHERE sm.state = 'done'
-				AND COALESCE(sm.scrapped, false) = false
-				AND kvl.product_id = %s 
-				AND (kvl.location_id = %s or kvl.location_dest_id = %s)
-				AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
-					(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
-					OR COALESCE(kvl.is_transfer, false) != true )
-				ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC LIMIT 1;"""
+			#params = (p.id,) + 4 * (self.move_id.location_id.id,)
+			# TODO FIXME en caso usen lotes, procesar con stock.move.line
+			layer = self.env['kdx.valuation.layer'].sudo().get_last_valuation(self.move_id.location_id, self.move_id.product_id)
+			# sql = f"""
+			# 	SELECT 
+			# 	kvl.avg_cost
+			# 	FROM 
+			# 	kdx_valuation_layer kvl
+			# 	JOIN stock_move sm ON sm.id = kvl.move_id
+			# 	WHERE sm.state = 'done'
+			# 	AND COALESCE(sm.scrapped, false) = false
+			# 	AND kvl.product_id = %s 
+			# 	AND (kvl.location_id = %s or kvl.location_dest_id = %s)
+			# 	AND ((kvl.is_transfer = true AND (kvl.location_id = %s AND kvl.layer_pair_id IS NULL) OR 
+			# 		(kvl.location_id != %s AND layer_pair_id IS NOT NULL)) 
+			# 		OR COALESCE(kvl.is_transfer, false) != true )
+			# 	ORDER BY kvl.date_done DESC, kvl.is_landed_cost DESC, kvl.id DESC LIMIT 1;"""
 			
-			self._cr.execute(sql, params)
-			res = self._cr.fetchone()
-			avg_cost = res and res[0] or 0.0
-			total_cost += avg_cost
+			# self._cr.execute(sql, params)
+			# res = self._cr.fetchone()
+			# avg_cost = res and res[0] or 0.0
+			#total_cost += avg_cost
+			total_cost += layer and layer.current_avg_cost or 0.0
 
 		return total_cost
