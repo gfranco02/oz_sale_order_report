@@ -14,7 +14,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle,getSampleStyleSheet
 from reportlab.pdfgen import canvas
 from odoo.addons.report_it.utils import register_fonts, get_encoded_image
-
+import os
 
 class AccountLetrasPaymentManual(models.Model):
 	_inherit = 'account.letras.payment.manual'
@@ -39,7 +39,6 @@ class AccountLetrasPaymentManual(models.Model):
 		separator = 12
 		bottom = 55
 		col_widths = [float(i)/100*wUtil for i in (13,16,9,12,12,13,12,13)]
-		
 
 		p1 = ParagraphStyle('p1', alignment=TA_CENTER, fontSize=8, fontName="Calibri-Bold")
 		p2 = ParagraphStyle('p2', alignment=TA_LEFT, fontSize=10, fontName="Calibri")
@@ -74,6 +73,7 @@ class AccountLetrasPaymentManual(models.Model):
 			12: "Diciembre",
 		}
 
+
 		def header(c):
 			com = self.env.company
 			if com.logo:
@@ -95,6 +95,8 @@ class AccountLetrasPaymentManual(models.Model):
 			hTable.wrapOn(c, 120, 500)
 			hTable.drawOn(c, pos_left, pos)
 
+		c.drawImage(ImageReader(os.path.dirname(os.path.abspath(__file__))+'/img/Caratula.jpg'),0,0, width=wPage+0, height=hPage+0, mask='auto')
+		c.showPage()
 		header(c)
 		partner = self[0].partner_id
 		#date_order = dt.to_string(dt.context_timestamp(self, dt.from_string()))
@@ -213,6 +215,8 @@ class AccountLetrasPaymentManual(models.Model):
 		c.drawString(422,20,u'IMPORTADORES & DISTRIBUIDORES')
 
 
+		c.showPage()
+		c.drawImage(ImageReader(os.path.dirname(os.path.abspath(__file__))+'/img/reverso.jpg'),0,0, width=wPage+0, height=hPage+0, mask='auto')
 		c.showPage()
 		c.setAuthor(self.env.company.name)
 		c.setTitle(file_name)
